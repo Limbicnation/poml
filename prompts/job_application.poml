@@ -22,8 +22,10 @@
   <p>---</p>
 
   <p><b>Example Request:</b></p>
-  <p>Please review my resume and the job description, then provide:
-  1. Specific, actionable suggestions for tailoring my resume.
-  2. A draft of a compelling cover letter.</p>
+  <p>Please review my resume and the job description, then provide:</p>
+  <list listStyle="decimal">
+    <item>Specific, actionable suggestions for tailoring my resume.</item>
+    <item>A draft of a compelling cover letter.</item>
+  </list>
 
 </poml>

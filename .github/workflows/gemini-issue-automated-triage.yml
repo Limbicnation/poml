@@ -73,7 +73,7 @@ jobs:
         uses: 'google-github-actions/run-gemini-cli@v0'
         id: 'gemini_issue_analysis'
         env:
-          GITHUB_TOKEN: '' # Do not pass any auth token here since this runs on untrusted inputs
+          GITHUB_TOKEN: '' # Explicitly do not pass any auth token here; ensure this step cannot access any token, as it runs on untrusted inputs
           ISSUE_TITLE: '${{ github.event.issue.title }}'
           ISSUE_BODY: '${{ github.event.issue.body }}'
           ISSUE_NUMBER: '${{ github.event.issue.number }}'

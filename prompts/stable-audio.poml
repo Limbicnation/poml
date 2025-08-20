@@ -1,53 +1,29 @@
-poml_version: 1.0
-definitions:
-  - name: audio_parameters
-    description: "Parameters for generating a professional-grade audio track."
-    parameters:
-      - name: description
-        type: string
-        description: "A high-level description of the audio track."
-        example: "A cinematic and epic orchestral piece."
-      - name: genre
-        type: string
-        description: "The primary genre and sub-genre of the music."
-        example: "Classical, Orchestral, Cinematic"
-      - name: mood
-        type: string
-        description: "The mood and emotion the track should evoke."
-        example: "Epic, Soaring, Melancholic, Mysterious"
-      - name: instruments
-        type: array
-        description: "A list of instruments to be featured in the track."
-        example: ["strings", "brass", "timpani", "piano"]
-      - name: bpm
-        type: integer
-        description: "The tempo of the track in beats per minute."
-        example: 120
-      - name: negative_prompts
-        type: array
-        description: "A list of elements to exclude from the audio."
-        example: ["low quality", "muddy sound", "no percussion"]
-      - name: influences
-        type: array
-        description: "Artists or tracks to use as inspiration."
-        example: ["Hans Zimmer", "John Williams"]
+<poml>
+  <p>You are an expert in audio engineering and prompt engineering. Your task is to generate a comprehensive and detailed prompt for the 'stable-audio' AI model to create a professional-grade audio track based on the user's requirements.</p>
 
-context:
-  - role: "system"
-    content: "You are an expert in audio engineering and prompt engineering. Your task is to generate a comprehensive and detailed prompt for the 'stable-audio' AI model to create a professional-grade audio track based on the user's requirements."
+  <p><b>Audio Requirements:</b></p>
+  <list listStyle="dash">
+    <item><b>Description:</b> {{ description }}</item>
+    <item><b>Genre:</b> {{ genre }}</item>
+    <item><b>Mood:</b> {{ mood }}</item>
+    <item><b>Instruments:</b><div whiteSpace="pre">{{ instruments }}</div></item>
+    <item><b>BPM:</b> {{ bpm }}</item>
+    <item><b>Influences:</b><div whiteSpace="pre">{{ influences }}</div></item>
+    <item><b>Negative Prompts:</b><div whiteSpace="pre">{{ negative_prompts }}</div></item>
+  </list>
 
-instructions:
-  - instruction: "Analyze the user's request and extract the key elements for the audio track."
-  - instruction: "Fill in the 'audio_parameters' with the extracted information."
-  - instruction: "Construct a detailed prompt for 'stable-audio' using the following structure: '{{genre}} | {{description}} | Instruments: {{instruments}} | Moods: {{mood}} | BPM: {{bpm}} | Influences: {{influences}} | Negative Prompts: {{negative_prompts}}'"
-  - instruction: "Ensure the generated prompt is clear, concise, and follows the best practices for 'stable-audio'."
-  - instruction: "Output only the final, constructed prompt."
+  <p><b>Generation Process:</b></p>
+  <list listStyle="decimal">
+    <item>Analyze the user's request to extract the key elements for the audio track.</item>
+    <item>Populate the audio requirement parameters based on the request.</item>
+    <item>Construct a detailed, single-line prompt for 'stable-audio' using the following structure: '{{genre}} | {{description}} | Instruments: {{instruments}} | Moods: {{mood}} | BPM: {{bpm}} | Influences: {{influences}} | Negative Prompts: {{negative_prompts}}'</item>
+    <item>Ensure the generated prompt is clear, concise, and follows the best practices for 'stable-audio'.</item>
+    <item>Output only the final, constructed prompt.</item>
+  </list>
 
-prompt: |
-  Generate a stable-audio prompt for the following request:
+  <p>---</p>
 
-  **Request:**
-  "I need a cinematic track for a movie trailer. It should be orchestral, with a sense of epic scale and a touch of melancholy. I want to hear strings, brass, and powerful timpani drums. The tempo should be around 120 BPM. I'm inspired by composers like Hans Zimmer and John Williams. Please make sure the sound quality is high and not muddy."
+  <p><b>Example Request:</b></p>
+  <p>"I need a cinematic track for a movie trailer. It should be orchestral, with a sense of epic scale and a touch of melancholy. I want to hear strings, brass, and powerful timpani drums. The tempo should be around 120 BPM. I'm inspired by composers like Hans Zimmer and John Williams. Please make sure the sound quality is high and not muddy."</p>
 
-  **Generated Prompt:**
-  {{genre}} | {{description}} | Instruments: {{instruments}} | Moods: {{mood}} | BPM: {{bpm}} | Influences: {{influences}} | Negative Prompts: {{negative_prompts}}
+</poml>

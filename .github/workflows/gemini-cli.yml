@@ -121,7 +121,8 @@ jobs:
       - name: 'Set up git user for commits'
         run: |-
           git config --global user.name 'gemini-cli[bot]'
-          git config --global user.email 'gemini-cli[bot]@users.noreply.github.com'
+          git config --global user.name "${GEMINI_BOT_NAME}"
+          git config --global user.email "${GEMINI_BOT_EMAIL}"
 
       - name: 'Checkout PR branch'
         if: |-

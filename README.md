@@ -3,7 +3,9 @@ A markup language for defining, orchestrating, and managing AI prompt templates 
 
 ## Overview
 
-POML (Prompt Markup Language) is a powerful framework for creating and managing AI prompt templates with advanced composition and templating capabilities. This repository contains various POML configurations for agentic AI systems, including social media content generation, sophisticated 3D modeling with Blender, code engineering and QA, job applications, and specialized development workflows.
+POML (Prompt Markup Language) is a powerful framework for creating and managing AI prompt templates with advanced composition and templating capabilities. For more information about POML, see the [official POML repository](https://github.com/microsoft/poml).
+
+This repository contains various POML configurations for agentic AI systems, including social media content generation, sophisticated 3D modeling with Blender, code engineering and QA, job applications, and specialized development workflows.
 
 ## Project Structure
 

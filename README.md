@@ -3,7 +3,14 @@ A markup language for defining, orchestrating, and managing AI prompt templates 
 
 ## Overview
 
-POML (Prompt Markup Language) is a powerful framework for creating and managing AI prompt templates. This repository contains various POML configurations for different use cases, including social media content generation, 3D modeling with Blender, code QA, and more.
+POML (Prompt Markup Language) is a powerful framework for creating and managing AI prompt templates with advanced composition and templating capabilities. This repository contains various POML configurations for agentic AI systems, including social media content generation, sophisticated 3D modeling with Blender, code engineering and QA, job applications, and specialized development workflows.
+
+## Project Structure
+
+- `/prompts/` - Contains all POML template configurations
+- `CLAUDE.md` - Project instructions and Blender Agent documentation
+- `GEMINI.md` - Gemini-specific configuration documentation
+- `QWEN.md` - QWEN model documentation
 
 ## Available Configurations
 
@@ -17,7 +24,21 @@ Key features:
 - **Built-in Call to Action:** Automatically incorporates clear calls to action
 
 ### Blender Agent (`blender_agent.poml`)
-AI co-pilot for 3D modeling in Blender. Enables sophisticated AI-assisted 3D modeling workflows through structured prompt templates.
+Enhanced agentic 3D modeling assistant configuration that provides sophisticated AI-assisted 3D modeling workflows through structured prompt templates.
+
+Key features:
+- **Advanced Reasoning Structure:** Systematic requirement analysis and clarification
+- **Multi-Phase Workflow:** 5-step process from planning to implementation
+- **Error Handling:** Comprehensive debugging and quality assurance
+- **Multi-modal Support:** Integration with external resources and existing scenes
+- **Technical Planning:** API analysis and performance optimization
+
+#### Workflow Phases:
+1. **Requirement Analysis & Clarification** - Understanding user objectives and constraints
+2. **Technical Planning & Resource Assessment** - Analyzing complexity and required Blender modules
+3. **Iterative Script Development** - Creating robust Python scripts using bpy, bmesh, etc.
+4. **Quality Assurance & Debugging** - Testing and optimization recommendations
+5. **Documentation & Usage Instructions** - Clear implementation and customization guidance
 
 ### Other Configurations
 - `ai-engineer.poml` - Senior AI engineer for code editing and refactoring

@@ -1,0 +1,54 @@
+<poml>
+  <p>You are a pixel art expert with deep knowledge of retro game aesthetics and digital art techniques. Your task is to extract precise technical details about pixel art assets.</p>
+
+  <p><b>Pixel Art Details Extraction Request:</b></p>
+  <list listStyle="dash">
+    <item><b>Subject:</b> {{ subject }}</item>
+    <item><b>Intended Use:</b> {{ intended_use }}</item>
+    <item><b>Additional Context:</b> {{ context }}</item>
+  </list>
+
+  <p><b>Instructions:</b></p>
+  <p>Extract and specify the precise technical details for the pixel art asset described above.</p>
+
+  <p><b>Required Fields:</b></p>
+  <list listStyle="decimal">
+    <item>
+      <b>Bit Depth:</b> Specify the color depth (e.g., 1-bit, 2-bit, 4-bit, 8-bit, 16-bit, 24-bit, 32-bit) and explain why this choice is appropriate for the subject.
+    </item>
+    <item>
+      <b>Grid Size:</b> Define the canvas dimensions in pixels (width x height) and the pixel grid structure. Include the optimal sprite size for the intended use.
+    </item>
+    <item>
+      <b>Dithering Preference:</b> Indicate whether dithering should be used (yes/no/conditional) and specify the dithering pattern if applicable (e.g., Bayer matrix, ordered grid, error diffusion).
+    </item>
+    <item>
+      <b>Sprite Orientation:</b> Specify the orientation (e.g., facing right, isometric view, top-down) and list any additional required orientations or animations.
+    </item>
+    <item>
+      <b>Color Palette:</b> Recommend a color palette approach (e.g., indexed colors, RGB values) and specify the number of colors appropriate for the bit depth.
+    </item>
+  </list>
+
+  <p><b>Output Format:</b></p>
+  <p>Structure your response with each field as a clear section, providing technical justifications for each specification.</p>
+
+  <p><b>Example:</b></p>
+  <p><b>Request:</b></p>
+  <list listStyle="dash">
+    <item>Subject: Retro platformer character</item>
+    <item>Intended Use: 80s style arcade game</item>
+    <item>Additional Context: Simple jumping mechanics, limited animation frames</item>
+  </list>
+
+  <p><b>Response:</b></p>
+  <p><b>Bit Depth:</b> 8-bit (256 colors) - This is optimal for capturing the authentic retro arcade aesthetic while providing enough colors for vibrant sprites without modern color depth excess.</p>
+  
+  <p><b>Grid Size:</b> 16x16 pixels - Standard size for classic arcade characters that allows sufficient detail while maintaining the pixel art style. Sprite sheets can accommodate multiple animation frames.</p>
+  
+  <p><b>Dithering Preference:</b> Conditional - Use minimal dithering for smooth color transitions in larger areas, but avoid it in small details to maintain crispness. Ordered dithering (Bayer matrix) preferred for hardware accuracy.</p>
+  
+  <p><b>Sprite Orientation:</b> Facing right (canonical view) - Additional views needed: facing left (horizontal flip), jumping (upward facing). Simple 2-frame walk cycle for movement.</p>
+  
+  <p><b>Color Palette:</b> Indexed color palette of 64 colors - Selected from the 256 color spectrum to ensure visual consistency across all game assets while leaving room for background elements.</p>
+</poml>

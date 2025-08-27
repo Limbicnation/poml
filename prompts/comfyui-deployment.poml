@@ -1,0 +1,68 @@
+<poml>
+  <role>
+    You are an expert DevOps engineer and cloud architect with extensive experience in deploying scalable, full-stack applications. Your specialty is in MLOps, particularly with generative AI workflows like ComfyUI. You are tasked with creating a detailed, step-by-step deployment plan for a ComfyUI-based application.
+  </role>
+
+  <task>
+    Generate a comprehensive deployment plan for a ComfyUI workflow. The application includes a custom frontend, a backend that communicates with the ComfyUI API, and is integrated with a subscription-based service like Stripe or Lemon Squeezy for user authentication and access control. The plan should be suitable for a production environment, emphasizing security, scalability, and maintainability.
+  </task>
+
+  <context>
+    <p>The application consists of three main components:</p>
+    <ul>
+      <li><strong>Frontend:</strong> A modern web interface (e.g., React, Vue, or Svelte) that allows users to interact with the ComfyUI workflow.</li>
+      <li><strong>Backend:</strong> A server-side application (e.g., Node.js/Express, Python/FastAPI) that handles user requests, manages jobs, and communicates with the ComfyUI server.</li>
+      <li><strong>ComfyUI Instance:</strong> A dedicated ComfyUI server running the specified workflow, including any custom nodes or models.</li>
+      <li><strong>Subscription Service:</strong> Integration with a third-party service to manage user subscriptions and API access.</li>
+    </ul>
+    <p>The goal is to deploy this entire stack to a cloud provider (e.g., AWS, GCP, Azure) using a containerized approach for consistency and scalability.</p>
+  </context>
+
+  <requirements>
+    <p>The deployment plan must cover the following aspects:</p>
+    <ol>
+      <li><strong>Infrastructure Setup:</strong> Define the necessary cloud resources (e.g., VPC, subnets, security groups).</li>
+      <li><strong>Containerization:</strong> Provide Dockerfiles for each component (Frontend, Backend, ComfyUI).</li>
+      <li><strong>Orchestration:</strong> Use Docker Compose for local development and Kubernetes (or a similar service like AWS ECS) for production.</li>
+      <li><strong>CI/CD Pipeline:</strong> Outline a continuous integration and deployment pipeline using GitHub Actions.</li>
+      <li><strong>Security:</strong> Implement best practices for securing the application, including environment variable management, network policies, and user authentication.</li>
+      <li><strong>Scalability:</strong> Address how to scale each component independently based on demand.</li>
+      <li><strong>Monitoring & Logging:</strong> Suggest tools and strategies for monitoring the application's health and logging events.</li>
+    </ol>
+  </requirements>
+
+  <output-format>
+    <p>The output should be a detailed, multi-step guide formatted in Markdown. Each step should include clear explanations, code snippets, and configuration examples where applicable. The tone should be professional and instructional, suitable for a developer to follow.</p>
+    <p>The plan should be structured as follows:</p>
+    <pre>
+      # ComfyUI Deployment Plan
+
+      ## 1. Infrastructure as Code (IaC)
+         - Terraform or CloudFormation scripts for setting up networking and base resources.
+
+      ## 2. Containerization
+         - Dockerfile for the Frontend.
+         - Dockerfile for the Backend.
+         - Dockerfile for the ComfyUI instance with custom nodes.
+
+      ## 3. Local Development Setup
+         - `docker-compose.yml` for running the entire stack locally.
+
+      ## 4. Production Deployment (Kubernetes)
+         - Kubernetes deployment manifests for each component.
+         - Service and Ingress configurations.
+         - Persistent Volume Claims for models and data.
+
+      ## 5. CI/CD Pipeline
+         - GitHub Actions workflow (`.github/workflows/deploy.yml`).
+
+      ## 6. Security & Configuration
+         - Managing secrets with Kubernetes Secrets or a dedicated secret manager.
+         - Implementing JWT-based authentication between the frontend and backend.
+
+      ## 7. Scaling & Monitoring
+         - Horizontal Pod Autoscaler (HPA) configuration.
+         - Setting up Prometheus and Grafana for monitoring.
+    </pre>
+  </output-format>
+</poml>

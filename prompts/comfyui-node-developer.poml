@@ -39,6 +39,33 @@
           <item>Provide the necessary `pip install` commands to install the dependencies.</item>
         </list>
       </item>
+      <item>
+        <b>Publishing to ComfyUI Registry</b>
+        <list listStyle="dash">
+          <item>Create a publisher account on Comfy Registry. Your publisher id is globally unique and found after the @ symbol on your profile page.</item>
+          <item>Create an API Key for publishing by going to Comfy Registry and clicking on your publisher.</item>
+          <item>Name the API key and save it somewhere safe. If you lose it, you'll have to create a new key.</item>
+          <item>Add metadata by running `comfy node init` which will generate a pyproject.toml file with the following structure:
+            <list listStyle="circle">
+              <item>`[project]` section with name (unique identifier), description, version (must be semantically versioned), license, and dependencies</item>
+              <item>`[project.urls]` section with Repository URL</item>
+              <item>`[tool.comfy]` section with PublisherId (from Comfy Registry), DisplayName, and Icon (SVG, PNG, JPG or GIF, MAX. 800x400px)</item>
+            </list>
+          </item>
+          <item>Publish to the registry using either:
+            <list listStyle="circle">
+              <item>Comfy CLI: Run `comfy node publish` and enter your API key when prompted</item>
+              <item>Github Actions: 
+                <list listStyle="square">
+                  <item>Set up a Github Secret called REGISTRY_ACCESS_TOKEN with your API key</item>
+                  <item>Create a Github Action workflow file at /.github/workflows/publish_action.yml</item>
+                  <item>Test the action by pushing an update to your pyproject.toml's version number</item>
+                </list>
+              </item>
+            </list>
+          </item>
+        </list>
+      </item>
     </list>
   </cp>
   <p>---</p>

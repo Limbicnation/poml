@@ -47,7 +47,9 @@ Key features:
 - `code-qa.poml` - Specialized Code-QA assistant
 - `comfyui-node-developer.poml` - Developer for ComfyUI custom nodes
 - `job_application.poml` - Assistant for creating job applications
+- `job-interview.poml` - Comprehensive job interview process guide
 - `job_search.poml` - Specialized job search assistant
+- `job-preparation.poml` - Job preparation and evaluation guide for candidates
 - `stable-audio.poml` - Audio generation with Stable Audio
 - `unreal-cpp-senior.poml` - Senior Unreal Engine C++ developer
 - `wordpress_agent.poml` - WordPress development assistant

@@ -61,6 +61,12 @@ Key features:
 3. Provide the required inputs as defined in each configuration
 4. The assistant will generate content based on the template
 
+## Syntax
+
+´<poml>
+  <p>Hello, world!</p>
+</poml>´
+
 ## Documentation
 
 For detailed information about each configuration, refer to the specific documentation files:

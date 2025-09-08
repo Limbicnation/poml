@@ -63,9 +63,9 @@ Key features:
 
 ## Syntax
 
-´<poml>
+<poml>
   <p>Hello, world!</p>
-</poml>´
+</poml>
 
 ## Documentation
 

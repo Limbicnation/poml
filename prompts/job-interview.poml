@@ -10,118 +10,58 @@
     <item><b>Specific Requirements:</b> {{ specific_requirements }}</item>
   </list>
 
-  <p><b>Interview Process Overview:</b></p>
-  <p>Follow these steps to ensure a comprehensive and effective interview process:</p>
+  <p><b>Interview Process Framework:</b></p>
 
   <list listStyle="decimal">
     <item>
-      <b>Pre-Interview Preparation</b>
+      <b>Preparation (Pre-Interview)</b>
       <list listStyle="dash">
-        <item>Review the job description and identify key competencies required for the role</item>
-        <item>Develop a structured interview guide with role-specific questions</item>
-        <item>Ensure all interview panel members understand their roles and responsibilities</item>
-        <item>Prepare evaluation criteria and scoring rubrics</item>
-        <item>Schedule interviews with appropriate time allocations</item>
+        <item>Define role-specific competencies and evaluation criteria</item>
+        <item>Prepare structured questions targeting technical skills, cultural fit, and problem-solving</item>
+        <item>Establish scoring rubrics (1-5 scale) for consistent evaluation</item>
       </list>
     </item>
     <item>
-      <b>Candidate Assessment Framework</b>
+      <b>Assessment Areas</b>
       <list listStyle="dash">
-        <item>Evaluate technical skills relevant to the position</item>
-        <item>Assess cultural fit with the organization</item>
-        <item>Measure problem-solving and critical thinking abilities</item>
-        <item>Explore past experiences and achievements</item>
-        <item>Assess communication and interpersonal skills</item>
-        <item>Identify growth potential and career aspirations</item>
+        <item>Technical Competence - Can they do the job?</item>
+        <item>Cultural Alignment - Will they thrive here?</item>
+        <item>Growth Potential - Can they develop with the role?</item>
+        <item>Communication Skills - Can they collaborate effectively?</item>
       </list>
     </item>
     <item>
-      <b>Interview Structure</b>
+      <b>Decision Framework</b>
       <list listStyle="dash">
-        <item>Begin with introductions and rapport building</item>
-        <item>Present an overview of the role and company</item>
-        <item>Ask behavioral and situational questions</item>
-        <item>Allow time for candidate questions</item>
-        <item>Conclude with next steps and timeline</item>
-      </list>
-    </item>
-    <item>
-      <b>Legal Compliance and Best Practices</b>
-      <list listStyle="dash">
-        <item>Avoid discriminatory questions related to protected characteristics</item>
-        <item>Maintain consistent evaluation criteria across all candidates</item>
-        <item>Document interview notes and observations objectively</item>
-        <item>Ensure all panel members have equal opportunity to interact with candidates</item>
-        <item>Follow company policies regarding background checks and reference verification</item>
-      </list>
-    </item>
-    <item>
-      <b>Post-Interview Evaluation</b>
-      <list listStyle="dash">
-        <item>Debrief with interview panel members promptly</item>
-        <item>Score candidates against predetermined criteria</item>
-        <item>Compare candidate qualifications and fit</item>
-        <item>Make decisions based on job-related factors</item>
-        <item>Communicate outcomes to candidates in a timely manner</item>
+        <item>Score each assessment area (1-5)</item>
+        <item>Identify dealbreakers vs. development areas</item>
+        <item>Make hire/no-hire decision based on role requirements</item>
+        <item>Document rationale for legal compliance</item>
       </list>
     </item>
   </list>
 
-  <p><b>Critical Interview Questions by Category:</b></p>
+  <p><b>Key Interview Questions by Assessment Area:</b></p>
   <list listStyle="dash">
-    <item><b>Technical Skills:</b> What experience do you have with [specific technology/process]?</item>
-    <item><b>Problem Solving:</b> Describe a time you solved a complex problem at work.</item>
-    <item><b>Teamwork:</b> Tell me about a time you had to work with a difficult colleague.</item>
-    <item><b>Leadership:</b> How have you motivated a team to achieve a challenging goal?</item>
-    <item><b>Adaptability:</b> Describe a situation where you had to adapt to significant changes.</item>
-    <item><b>Cultural Fit:</b> What values are most important to you in a workplace?</item>
+    <item><b>Technical:</b> "Walk me through your approach to [specific challenge in this role]"</item>
+    <item><b>Problem-Solving:</b> "Describe a complex problem you solved and your methodology"</item>
+    <item><b>Cultural Fit:</b> "What work environment brings out your best performance?"</item>
+    <item><b>Growth:</b> "How do you stay current with industry developments?"</item>
   </list>
 
-  <p><b>Red Flags to Watch For:</b></p>
+  <p><b>Decision-Making Red Flags:</b></p>
   <list listStyle="dash">
-    <item>Inability to provide specific examples from past experiences</item>
-    <item>Negative comments about previous employers or colleagues</item>
-    <item>Lack of preparation or knowledge about the company</item>
-    <item>Inconsistent information in resume vs. interview responses</item>
-    <item>Poor communication skills for roles requiring interaction</item>
-    <item>Unrealistic salary expectations or job requirements</item>
+    <item>Cannot provide specific examples with measurable outcomes</item>
+    <item>Blames others for failures without self-reflection</item>
+    <item>Shows no preparation or genuine interest in the role</item>
+    <item>Communication style misaligned with job requirements</item>
   </list>
 
-  <p><b>Evaluation Criteria:</b></p>
+  <p><b>Final Recommendation Format:</b></p>
   <list listStyle="dash">
-    <item><b>Technical Competence:</b> Knowledge and skills relevant to the position</item>
-    <item><b>Cultural Alignment:</b> Compatibility with company values and work environment</item>
-    <item><b>Communication Skills:</b> Clarity, listening ability, and interpersonal effectiveness</item>
-    <item><b>Problem-Solving Ability:</b> Analytical thinking and creative solutions</item>
-    <item><b>Reliability:</b> Work ethic, dependability, and commitment to quality</item>
-    <item><b>Growth Potential:</b> Learning agility and career development trajectory</item>
-  </list>
-
-  <p><b>Final Recommendation Framework:</b></p>
-  <p>Provide a structured recommendation that includes:</p>
-  <list listStyle="dash">
-    <item>Summary of candidate's strengths and qualifications</item>
-    <item>Areas of concern or development needs</item>
-    <item>Overall fit score (1-10) with justification</item>
-    <item>Recommendation (Strong Hire, Hire, No Hire, Strong No Hire)</item>
-    <item>Specific onboarding considerations if hired</item>
-  </list>
-
-  <p><b>Sample Interview Schedule:</b></p>
-  <list listStyle="decimal">
-    <item>Phone Screening (30 minutes) - HR representative</item>
-    <item>Technical Interview (60 minutes) - Team lead or senior team member</item>
-    <item>Cultural Fit Interview (45 minutes) - Cross-functional colleague</item>
-    <item>Leadership Interview (45 minutes) - Manager or department head</item>
-    <item>Final Review and Decision (60 minutes) - Interview panel debrief</item>
-  </list>
-
-  <p><b>Additional Considerations:</b></p>
-  <list listStyle="dash">
-    <item>Accommodate special needs or scheduling requirements</item>
-    <item>Consider remote work options if applicable</item>
-    <item>Plan for backup interviewers in case of scheduling conflicts</item>
-    <item>Prepare offer letter templates and compensation ranges</item>
-    <item>Establish onboarding process for selected candidate</item>
+    <item>Overall Score (1-5) with breakdown by assessment area</item>
+    <item>Recommendation: Strong Hire / Hire / No Hire / Strong No Hire</item>
+    <item>Key strengths and concerns (2-3 bullets each)</item>
+    <item>Onboarding focus areas if hired</item>
   </list>
 </poml>

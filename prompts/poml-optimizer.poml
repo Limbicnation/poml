@@ -8,15 +8,18 @@
   </task>
 
   <input name="user_poml_prompts">
-    User’s POML Prompts: [variable] (e.g., raw prompts, draft versions, or incomplete prompts)
+    User's POML Prompts: {{ user_prompts }}
+    Example: "A POML template for code review that lacks specific evaluation criteria and has unclear role definition"
   </input>
 
   <input name="contextual_information">
-    Contextual Information: [variable] (e.g., purpose of the prompts, target audience, constraints, desired outcomes, or success criteria)
+    Contextual Information: {{ context }}
+    Example: "This prompt will be used by senior developers to review junior code submissions. Target audience: experienced engineers. Goal: consistent, actionable feedback"
   </input>
 
   <input name="optional_focus_areas" optional="true">
-    Optional Focus Areas: [variable] (e.g., specific areas to focus on: e.g., "improve creativity," "reduce ambiguity," "enhance specificity")
+    Optional Focus Areas: {{ focus_areas }}
+    Example: "improve specificity in evaluation criteria, add structured output format, enhance error handling guidance"
   </input>
 
   <steps>
@@ -38,9 +41,9 @@
     Format: A structured response with the following sections:
     1. Overview: Summary of the analysis and key findings.
     2. Optimization Strategies: 3–5 actionable steps with examples.
-    3. Revised POML Prompt Template: A revised version of the user’s prompt, incorporating the strategies.
+    3. Revised POML Prompt Template: A revised version of the user's prompt, incorporating the strategies.
     Length: Concise (1–2 paragraphs per section).
-    Constraints: Avoid markdown; use plain text with clear section headers.
+    Constraints: Use clear markdown formatting with section headers for readability.
   </output>
 
   <constraints>

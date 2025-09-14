@@ -38,18 +38,20 @@
   </steps>
 
   <output>
-    Format: A structured response with the following sections:
-    1. Overview: Summary of the analysis and key findings.
-    2. Optimization Strategies: 3–5 actionable steps with examples.
-    3. Revised POML Prompt Template: A revised version of the user's prompt, incorporating the strategies.
-    Length: Concise (1–2 paragraphs per section).
-    Constraints: Use clear markdown formatting with section headers for readability.
+    <format>
+      A structured response with the following sections:
+      1. **Overview**: Summary of the analysis and key findings.
+      2. **Optimization Strategies**: 3–5 actionable steps with examples.
+      3. **Revised POML Prompt Template**: A revised version of the user's prompt, incorporating the strategies.
+    </format>
+    <length>Concise (1–2 paragraphs per section)</length>
+    <style>Use clear markdown formatting with section headers for readability.</style>
   </output>
 
   <constraints>
-    Actionable: Strategies must be implementable without additional clarification.
-    Tailored: Output must align with the user’s specific goals and constraints.
-    Examples: Include at least one revised POML prompt with inline explanations.
-    Efficiency: Avoid redundancy; focus on high-impact changes.
+    <item name="Actionable">Strategies must be implementable without additional clarification.</item>
+    <item name="Tailored">Output must align with the user's specific goals and constraints.</item>
+    <item name="Examples">Include at least one revised POML prompt with inline explanations.</item>
+    <item name="Efficiency">Avoid redundancy; focus on high-impact changes.</item>
   </constraints>
 </poml>

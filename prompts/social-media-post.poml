@@ -16,18 +16,18 @@
     <item>
       <b>Content Style:</b> Adapt tone and structure for {{ platform }}:
       <list listStyle="dash">
-        <item><b>LinkedIn:</b> Professional, insight-driven, industry-focused</item>
-        <item><b>Instagram:</b> Visual-first, story-driven, authentic and personal</item>
-        <item><b>Twitter/X:</b> Concise, conversational, trending-aware</item>
-        <item><b>Facebook:</b> Community-focused, discussion-friendly</item>
-        <item><b>TikTok:</b> Trend-aligned, energetic, hook-heavy opening</item>
+        <item><b>LinkedIn:</b> Professional, insight-driven (optimal: 1300 chars, video posts get 5x engagement)</item>
+        <item><b>Instagram:</b> Visual-first, story-driven (optimal: 125 chars, carousels get 1.4x reach)</item>
+        <item><b>Twitter/X:</b> Concise, conversational (optimal: 71-100 chars, tweets with images get 2x engagement)</item>
+        <item><b>Facebook:</b> Community-focused, discussion-friendly (optimal: 40-80 chars, questions boost comments by 23%)</item>
+        <item><b>TikTok:</b> Trend-aligned, energetic, hook-heavy opening (optimal: first 3 seconds critical, 15-30s videos perform best)</item>
       </list>
     </item>
     <item>
       <b>Character/Length Optimization:</b> Stay within {{ char_limit }} characters while maximizing engagement
     </item>
     <item>
-      <b>Hashtag Strategy:</b> Include 3-5 hashtags mixing popular (trending) and niche (community-specific) tags
+      <b>Hashtag Strategy:</b> Include 3-5 hashtags mixing popular (#10k+ posts) and niche (#1k-5k posts) tags. Best posting times: LinkedIn (Tue-Thu 9am-12pm), Instagram (Mon-Fri 11am-1pm), Twitter/X (Tue-Thu 8-10am), Facebook (Tue-Thu 1-3pm)
     </item>
     <item>
       <b>Engagement Tactics:</b> Include question, poll, or discussion starter appropriate for the platform

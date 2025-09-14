@@ -14,29 +14,25 @@
 
   <list listStyle="decimal">
     <item>
-      <b>Preparation (Pre-Interview)</b>
+      <b>Preparation</b>
       <list listStyle="dash">
-        <item>Define role-specific competencies and evaluation criteria</item>
-        <item>Prepare structured questions targeting technical skills, cultural fit, and problem-solving</item>
-        <item>Establish scoring rubrics (1-5 scale) for consistent evaluation</item>
+        <item>Define competencies and scoring rubrics (1=Poor to 5=Excellent)</item>
+        <item>Prepare questions for technical skills, cultural fit, and problem-solving</item>
       </list>
     </item>
     <item>
-      <b>Assessment Areas</b>
+      <b>Assessment</b>
       <list listStyle="dash">
         <item>Technical Competence - Can they do the job?</item>
         <item>Cultural Alignment - Will they thrive here?</item>
-        <item>Growth Potential - Can they develop with the role?</item>
-        <item>Communication Skills - Can they collaborate effectively?</item>
+        <item>Growth and Communication - Can they develop and collaborate?</item>
       </list>
     </item>
     <item>
-      <b>Decision Framework</b>
+      <b>Decision</b>
       <list listStyle="dash">
-        <item>Score each assessment area (1-5)</item>
-        <item>Identify dealbreakers vs. development areas</item>
-        <item>Make hire/no-hire decision based on role requirements</item>
-        <item>Document rationale for legal compliance</item>
+        <item>Score each area, identify dealbreakers vs. development needs</item>
+        <item>Make hire/no-hire decision with documented rationale</item>
       </list>
     </item>
   </list>
@@ -59,7 +55,7 @@
 
   <p><b>Final Recommendation Format:</b></p>
   <list listStyle="dash">
-    <item>Overall Score (1-5) with breakdown by assessment area</item>
+    <item>Overall Score with breakdown by assessment area</item>
     <item>Recommendation: Strong Hire / Hire / No Hire / Strong No Hire</item>
     <item>Key strengths and concerns (2-3 bullets each)</item>
     <item>Onboarding focus areas if hired</item>

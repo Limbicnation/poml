@@ -11,19 +11,28 @@
   <p><b>Instructions:</b></p>
   <p>Generate a captivating social media post for the specified platform focusing on the given topic.</p>
 
-  <p><b>Constraints:</b></p>
+  <p><b>Platform-Specific Constraints:</b></p>
   <list listStyle="decimal">
     <item>
-      <b>Tone:</b> The text must be concise, engaging, and humble.
+      <b>Content Style:</b> Adapt tone and structure for {{ platform }}:
+      <list listStyle="dash">
+        <item><b>LinkedIn:</b> Professional, insight-driven (optimal: 1300 chars, video posts get 5x engagement)</item>
+        <item><b>Instagram:</b> Visual-first, story-driven (optimal: 125 chars, carousels get 1.4x reach)</item>
+        <item><b>Twitter/X:</b> Concise, conversational (optimal: 71-100 chars, tweets with images get 2x engagement)</item>
+        <item><b>Facebook:</b> Community-focused, discussion-friendly (optimal: 40-80 chars, questions boost comments by 23%)</item>
+        <item><b>TikTok:</b> Trend-aligned, energetic, hook-heavy opening (optimal: first 3 seconds critical, 15-30s videos perform best)</item>
+      </list>
     </item>
     <item>
-      <b>Character Limit:</b> Aim for a maximum of {{ char_limit }} characters.
+      <b>Character/Length Optimization:</b> Stay within {{ char_limit }} characters while maximizing engagement
     </item>
     <item>
-      <b>Hashtags:</b> Include 3-5 relevant and popular hashtags.
+      <b>Hashtag Strategy:</b> Include 3-5 hashtags mixing popular (#10k+ posts) and niche (#1k-5k posts) tags.
     </item>
     <item>
-      <b>Call to Action (CTA):</b> Integrate a clear and simple call to action.
+      <b>Optimal Posting Times:</b> Use best posting times for each platform: LinkedIn (Tue-Thu 9am-12pm), Instagram (Mon-Fri 11am-1pm), Twitter/X (Tue-Thu 8-10am), Facebook (Tue-Thu 1-3pm)
+    </item>
+      <b>Engagement Tactics:</b> Include question, poll, or discussion starter appropriate for the platform
     </item>
   </list>
 
@@ -34,14 +43,20 @@
   <p><b>Request:</b></p>
   <list listStyle="dash">
     <item>Platform: Instagram</item>
-    <item>Topic: Sharing a new blog post about sustainable living tips.</item>
+    <item>Topic: Sharing sustainable living tips from new blog post</item>
     <item>Character Limit: 300</item>
   </list>
 
   <p><b>Response:</b></p>
   <p><b>Post:</b>
-  Just published a new blog post sharing some simple and practical tips for sustainable living that have really made a difference in my life. It's a journey, and I'm learning every day. Hope you find it helpful! Let me know your thoughts. Link in bio!</p>
+  ✨ Just dropped a new blog post with 7 simple swaps that transformed my daily routine! From bamboo toothbrushes to DIY cleaning solutions - small changes, big impact.
+
+  What's one sustainable swap you've made recently? Drop it in the comments! 👇
+
+  Link in bio for the full list 🌱</p>
 
   <p><b>Hashtags:</b>
-  #sustainableliving #ecofriendly #sustainability #mindfulliving #gogreen</p>
+  #sustainableswaps #zerowaste #ecofriendlylife #plasticfree #greenliving</p>
+
+  <p><b>Engagement Analysis:</b> Visual hook (✨), authentic personal story, specific value (7 tips), direct question for comments, emoji usage appropriate for Instagram</p>
 </poml>

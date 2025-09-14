@@ -30,9 +30,9 @@
   <steps>
     <step>
       Determine the appropriate tone and message based on the value of `days_overdue`.
-      - If `days_overdue` is less than or equal to 3, use a friendly tone.
-      - If `days_overdue` is greater than 3 but less than or equal to 7, use a polite but firmer tone.
-      - If `days_overdue` is greater than 7, use a serious tone.
+      - If `days_overdue` is between 0 and 3 (inclusive), use a friendly tone.
+      - If `days_overdue` is between 4 and 7 (inclusive), use a polite but firmer tone.
+      - If `days_overdue` is 8 or more, use a serious tone.
     </step>
     <step>
       Incorporate the `name`, `invoice_id`, and optionally `service_description` into the message.

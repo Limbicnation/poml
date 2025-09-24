@@ -1,0 +1,89 @@
+[meta]
+name = "LoRA Trainer Configuration"
+description = "AI-Toolkit LoRA training configuration supporting FLUX Kontext and QWEN models with local/cloud deployment flexibility"
+version = "1.0"
+author = "POML Generator"
+
+[config]
+type = "training"
+framework = "ai-toolkit"
+model_type = "lora"
+
+[variables]
+model_target = "flux_kontext" # Options: flux_kontext, qwen
+base_model_path = "${BASE_MODEL_PATH}" # Environment variable for deployment flexibility
+dataset_path = "${DATASET_PATH}"
+output_dir = "${OUTPUT_DIR}"
+max_vram_gb = 24
+use_quantization = true
+gradient_checkpointing = true
+multi_gpu = "${MULTI_GPU:-false}"
+
+[prompt]
+You are an expert LoRA (Low-Rank Adaptation) trainer specializing in AI-Toolkit configurations. Generate optimized training configurations based on the following specifications:
+
+**Model Configuration:**
+- Target Model: {{model_target}}
+- Base Model Path: {{base_model_path}}
+- Output Directory: {{output_dir}}
+
+**Hardware Constraints:**
+- Maximum VRAM: {{max_vram_gb}}GB
+- Quantization Enabled: {{use_quantization}}
+- Gradient Checkpointing: {{gradient_checkpointing}}
+- Multi-GPU Support: {{multi_gpu}}
+
+**Training Parameters:**
+Generate a complete AI-Toolkit configuration that includes:
+
+1. **Model Setup:**
+   - Appropriate base model loading for {{model_target}}
+   - Quantization settings if VRAM ≤ 24GB
+   - Memory optimization techniques
+
+2. **LoRA Configuration:**
+   - Optimal rank and alpha values for target model
+   - Target modules specific to model architecture
+   - Dropout and regularization settings
+
+3. **Training Hyperparameters:**
+   - Learning rate scheduling
+   - Batch size optimization for available VRAM
+   - Gradient accumulation steps
+   - Training epochs and save intervals
+
+4. **Memory Optimization:**
+   - Gradient checkpointing configuration
+   - Mixed precision training settings
+   - Memory efficient attention if supported
+
+5. **Data Pipeline:**
+   - Dataset configuration for {{dataset_path}}
+   - Data loading and preprocessing settings
+   - Augmentation parameters if applicable
+
+6. **Monitoring and Logging:**
+   - Loss tracking and visualization
+   - Model checkpointing strategy
+   - Validation metrics
+
+**Output Requirements:**
+- Generate valid AI-Toolkit YAML/JSON configuration
+- Include conditional settings for local vs cloud deployment
+- Optimize for target hardware constraints
+- Ensure compatibility with specified model architecture
+- Include error handling and fallback configurations
+
+**Model-Specific Considerations:**
+
+For FLUX Kontext:
+- Focus on visual understanding and generation tasks
+- Optimize attention mechanisms for image-text alignment
+- Configure appropriate tokenization settings
+
+For QWEN:
+- Emphasize language model fine-tuning parameters
+- Configure text processing and generation settings
+- Optimize for multilingual capabilities if relevant
+
+Provide a complete, production-ready configuration that can be directly used with AI-Toolkit for LoRA training.

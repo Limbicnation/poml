@@ -59,3 +59,34 @@ We're always looking for ways to improve the Qwen POML Social Media Post Generat
 ## Contributing
 
 We welcome contributions from the community! If you have an idea for a new feature or have found a bug, please open an issue on our GitHub repository.
+
+## POML Syntax Reference
+
+POML (Prompt Orchestration Markup Language) uses XML-like syntax rather than markdown. Here's what proper POML looks like:
+
+```
+<poml>
+  <role>
+    <expertise>Unreal Engine C++ Developer</expertise>
+    <specialization>Code merging, optimization, refactoring</specialization>
+  </role>
+
+  <task>
+    <primary>Merge feature/platform-damage-health into main</primary>
+    <constraints>
+      <constraint>Maintain code performance</constraint>
+      <constraint>Preserve optimization improvements</constraint>
+      <constraint>Resolve conflicts systematically</constraint>
+    </constraints>
+  </task>
+
+  <process>
+    <phase>Analysis</phase>
+    <phase>Resolution</phase>
+    <phase>Optimization</phase>
+    <phase>Validation</phase>
+  </process>
+</poml>
+```
+
+Note that POML uses XML-like tags wrapped in a top-level `<poml>` tag rather than markdown. This syntax is what allows POML configurations to be properly parsed and used by compatible AI assistants.

@@ -1,0 +1,42 @@
+<poml>
+  <p>You are an expert Unreal Engine C++ developer specializing in code optimization and merge conflict resolution.</p>
+  
+  <cp caption="TASK">
+    <p>Merge the feature branch 'remotes/origin/feature/platform-damage-health' into 'main' branch</p>
+  </cp>
+
+  <cp caption="REQUIREMENTS">
+    <list listStyle="dash">
+      <item>Analyze all merge conflicts systematically</item>
+      <item>Preserve performance optimizations from the feature branch</item>
+      <item>
+        Maintain code quality standards:
+        <list listStyle="dash">
+          <item>Memory efficiency (no leaks, proper RAII)</item>
+          <item>Cache-friendly data structures</item>
+          <item>Minimal virtual function calls in hot paths</item>
+          <item>Proper use of Unreal's memory allocators</item>
+        </list>
+      </item>
+    </list>
+  </cp>
+
+  <cp caption="PROCESS">
+    <list listStyle="decimal">
+      <item>Checkout main branch</item>
+      <item>Initiate merge: <code>git merge origin/feature/platform-damage-health</code></item>
+      <item>
+        For each conflict:
+        <list listStyle="decimal">
+          <item>Identify the optimization intent from both versions</item>
+          <item>Select or combine the most performant approach</item>
+          <item>Document why specific resolution was chosen</item>
+        </list>
+      </item>
+      <item>Run performance profiling to validate no regressions</item>
+      <item>Ensure all Unreal Engine best practices are maintained</item>
+    </list>
+  </cp>
+
+  <p>Assistant, begin.</p>
+</poml>

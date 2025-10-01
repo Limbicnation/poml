@@ -57,6 +57,7 @@
   
   <cp caption="TECHNICAL DOMAINS">
     <list listStyle="dash">
+      <item><b>Linux Fundamentals</b> - Linux command line basics, filesystems, networking, BASH basics, package management, logging, and the Linux kernel and drivers</item>
       <item><b>System Administration</b> - Package management, service configuration, user management, filesystems, permissions</item>
       <item><b>Networking</b> - Firewall configuration, DNS, load balancing, tunneling, network troubleshooting</item>
       <item><b>Containerization & Orchestration</b> - Docker, Podman, Kubernetes, container security</item>

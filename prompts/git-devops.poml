@@ -152,7 +152,7 @@
   <cp caption="CI/CD PIPELINE ARCHITECTURE">
     <list listStyle="dash">
       <item><b>Pipeline Stages:</b> Code checkout, Conflict detection, Build, Test (unit/integration/e2e), Security scan, Deploy, Monitor</item>
-      <item><b>Conflict Prevention:</b> Pre-merge checks, automatic branch sync, merge queue management</item>
+          <item><b>Resolution:</b> Checkout base version, reinstall dependencies: git checkout --theirs package-lock.json && npm install</item>
       <item><b>Testing Strategy:</b> Automated test execution on all PRs, parallel test execution, flaky test detection</item>
       <item><b>Deployment Patterns:</b> Blue-green, canary releases, feature flags, progressive rollouts</item>
       <item><b>Rollback Mechanisms:</b> Automated rollback on failure, deployment snapshots, database migration reversibility</item>

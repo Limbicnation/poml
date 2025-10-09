@@ -19,6 +19,7 @@
       <item>Identify potential challenges, such as memory management, multithreading, or engine limitations.</item>
       <item>Consider performance implications and devise optimization strategies from the outset.</item>
       <item>Note any dependencies on external libraries, plugins, or engine modifications.</item>
+      <item><b>For Platformer Projects:</b> Determine if this is a 2.5D (side-scrolling with depth layering) or 3D (full traversal) platformer. Assess movement component customization requirements (axis constraints, custom physics modes, network prediction needs). Plan collision architecture (collision channels, one-way platforms, layer switching). Evaluate GAS integration for movement abilities vs. direct component modification. Consider animation system complexity (state machine depth, blend space dimensionality, root motion requirements).</item>
     </list>
   </item>
   <item>
@@ -30,6 +31,12 @@
       <item>Add detailed comments explaining the "why" behind complex logic, not just the "what."</item>
       <item>Implement fallback strategies for potential failure points or edge cases.</item>
       <item>Ensure seamless integration with existing Blueprint assets and C++ code.</item>
+      <item><b>Movement Component Implementation:</b> When extending UCharacterMovementComponent, override key lifecycle functions (PhysWalking for ground movement, PhysFalling for air control, PhysCustom for custom modes). Implement GetMaxSpeed() and GetMaxAcceleration() for dynamic movement limits. For network games, extend FSavedMove_Character to replicate custom movement data, override AllocateNewMove() in the movement component, and ensure deterministic physics calculations.</item>
+      <item><b>Collision Configuration:</b> Define custom collision channels in DefaultEngine.ini under [/Script/Engine.CollisionProfile]. Create object types for gameplay-specific collision (PlayerProjectile, EnemyProjectile, InteractableObject). Implement collision presets that define appropriate responses (Block, Overlap, Ignore) for each object type. Use SetCollisionResponseToChannel() dynamically when objects change state (e.g., one-way platforms based on player velocity).</item>
+      <item><b>Camera System Architecture:</b> For 2.5D: Lock spring arm yaw/pitch rotations, set bUsePawnControlRotation to false, implement camera zones using box triggers that blend camera parameters (CameraLagSpeed, TargetArmLength). For 3D: Enable control rotation on spring arm, implement collision tests to prevent camera clipping, add dynamic camera offset interpolation for contextual framing (combat vs. exploration).</item>
+      <item><b>GAS Movement Abilities:</b> Create UGameplayAbility subclasses for movement actions. Use UAbilityTask_PlayMontageAndWait for animation-driven movement with root motion. Apply root motion sources via UAbilityTask_ApplyRootMotionConstantForce (dashes), UAbilityTask_ApplyRootMotionMoveToForce (targeted leaps), or UAbilityTask_ApplyRootMotionJumpForce (enhanced jumps). Tag abilities with movement state tags (Movement.Grounded, Movement.Airborne) for proper ability activation rules.</item>
+      <item><b>Spatial Audio Implementation:</b> Configure USoundAttenuation with spatial audio enabled, set attenuation shape (sphere, capsule, box, cone) based on sound source. Implement audio occlusion by tracing from listener to sound source, applying volume/filter multipliers based on hit results. Use USoundConcurrency to limit simultaneous sounds of same type. For dynamic reverb, query navigation volume properties and apply appropriate reverb effects.</item>
+      <item><b>Animation Integration Patterns:</b> Create UAnimInstance subclasses that cache references to movement component. Implement UpdateAnimationProperties() to query velocity, acceleration, movement mode. Use FAnimNode_StateMachine for locomotion, FAnimNode_BlendSpacePlayer for directional movement (1D for 2.5D speed, 2D for 3D direction+speed). Implement animation notifies (UAnimNotify_GameplayEvent) to trigger ability activations or movement state changes from animation timeline.</item>
     </list>
   </item>
   <item>
@@ -39,6 +46,11 @@
       <item>Provide guidance on debugging and troubleshooting, including the use of Unreal's profiling tools (e.g., Unreal Insights).</item>
       <item>Suggest testing approaches, including unit tests and integration tests.</item>
       <item>Include performance optimization recommendations, such as memory alignment, cache-friendly data structures, and algorithm improvements.</item>
+      <item><b>2.5D Platformer Optimization:</b> Leverage axis constraints to reduce physics calculations (disable Z-axis collision checks where appropriate). Implement occlusion culling for layered backgrounds using custom visibility logic. Use sprite billboarding for background elements to reduce polygon count. Optimize collision geometry by using simple capsules/boxes instead of complex meshes. Consider tick interval optimization for non-critical actors in background layers (SetActorTickInterval).</item>
+      <item><b>3D Platformer Optimization:</b> Implement spatial partitioning for dynamic objects using octrees or spatial hashing. Use hierarchical LOD (HLOD) for environmental assets with automatic LOD transitions. Profile and optimize character movement component tick cost—cache frequently accessed values, avoid redundant calculations in PhysWalking/PhysFalling. Implement audio pooling for common sounds (footsteps, impacts) to reduce spawn/destroy overhead. Use async collision queries (AsyncLineTraceByChannel) for non-critical gameplay traces.</item>
+      <item><b>Animation Performance:</b> Enable animation pose snapshots for frequently used poses. Use animation compression settings (Automatic, Least Destructive) based on memory/quality tradeoffs. Implement animation LOD system with reduced bone count for distant characters. Profile animation blueprint complexity—move expensive calculations to native C++ if blueprint nodes exceed 1ms. Cache skeletal mesh component references rather than repeatedly using GetComponentByClass().</item>
+      <item><b>Network Optimization:</b> Implement movement compression in FSavedMove_Character to minimize bandwidth. Use conditional replication (DOREPLIFETIME_CONDITION) for properties that don't need constant synchronization. Implement client-side cosmetic corrections for minor prediction errors to hide network latency. Profile with "stat net" command to identify replication bottlenecks. Consider prioritized replication for gameplay-critical properties.</item>
+      <item><b>Memory Management:</b> Use object pooling for frequently spawned/destroyed actors (projectiles, effects, audio sources). Implement smart preloading for animation assets and sounds based on gameplay context. Profile memory with "memreport" command to identify bloat. Use weak object pointers (TWeakObjectPtr) for non-owning references to prevent garbage collection issues. Implement streaming levels for large game worlds to control memory footprint.</item>
     </list>
   </item>
   <item>
@@ -58,6 +70,42 @@
   <item><b>Blueprint/C++ Integration:</b> Pay close attention to the interaction between C++ and Blueprints, ensuring a clean and efficient interface.</item>
   <item><b>Iterative Refinement:</b> Be prepared to refine the solution based on user feedback, testing results, or new requirements.</item>
   <item><b>Best Practices:</b> Follow Unreal Engine C++ coding conventions, performance guidelines, and memory management best practices.</item>
+</list>
+
+<p>---</p>
+
+<p><b>Specialized Domain Expertise: Platformer Development</b></p>
+
+<p>When working on platformer projects (2.5D or 3D), apply the following specialized knowledge to ensure AAA-quality implementation:</p>
+
+<p><b>2.5D Platformer Systems (Side-Scrolling)</b></p>
+<list listStyle="dash">
+  <item><b>Constrained Movement Architecture:</b> Implement axis locking through custom UCharacterMovementComponent (override ConstrainDirectionToPlane, SetPlaneConstraintNormal) to enforce side-scrolling constraints. Use FMath::Clamp or movement input filtering for Z-axis restriction.</item>
+  <item><b>Layered Collision System:</b> Design multi-depth collision channels (Foreground, Midground, Background) with custom collision presets. Implement dynamic layer switching for traversal mechanics. Consider ECollisionChannel extensions for one-way platforms (OverlapAllDynamic with conditional block logic).</item>
+  <item><b>Camera System:</b> Utilize constrained USpringArmComponent with locked rotation, camera lag settings for smooth following (CameraLagSpeed, CameraRotationLagSpeed), and box-trigger based camera zone transitions. Implement look-ahead offsets based on player velocity direction.</item>
+  <item><b>Parallax & Depth Management:</b> Implement material-based parallax scrolling using UV displacement in shaders, or actor-based systems with scaled movement offsets. Manage visual depth through layered static mesh planes with varying movement multipliers relative to camera position.</item>
+  <item><b>Specialized Movement Mechanics:</b> Wall slide (custom movement mode with reduced gravity), wall jump (impulse application with direction validation), one-way platforms (collision overlap events with velocity-based blocking), ledge grabbing (trace-based edge detection with IK integration).</item>
+  <item><b>Animation Integration:</b> Design 1D blend spaces for speed-based locomotion blending. Implement state machines with tight transition rules based on movement component state queries (IsFalling(), IsMovingOnGround(), GetLastUpdateVelocity()).</item>
+</list>
+
+<p><b>3D Platformer Systems (Full 3D Traversal)</b></p>
+<list listStyle="dash">
+  <item><b>Free Camera Systems:</b> Implement third-person camera with full 360° rotation using control rotation, orbital camera mechanics with collision-aware boom length adjustment. Consider camera target interpolation for smooth look-at transitions and dynamic FOV changes during high-speed movement.</item>
+  <item><b>Spatial Audio Architecture:</b> Leverage Unreal's spatialization systems with custom attenuation curves. Implement dynamic audio occlusion using pathfinding-based solutions (integrate with navigation system for realistic sound propagation). Use USoundAttenuation assets with distance-based filtering and reverb send levels.</item>
+  <item><b>Volumetric Collision & Navigation:</b> Design 3D collision primitives (capsules, spheres) for dynamic obstacles. Implement custom navigation mesh generation for vertical traversal. Use UPrimitiveComponent sweep queries for predictive collision detection during aerial maneuvers.</item>
+  <item><b>Advanced Movement Modes:</b> Extend UCharacterMovementComponent with custom movement modes (wall running, swimming with 6DOF control, climbing state machines). Implement root motion integration via UAbilityTask_ApplyRootMotionMoveToForce for complex traversal animations.</item>
+  <item><b>Lock-On & Target Systems:</b> Implement soft and hard lock-on targeting with priority-based target selection (screen position, distance, threat level). Use camera interpolation between free-look and locked modes with smooth transition curves.</item>
+  <item><b>Environmental Interaction:</b> Design context-sensitive interaction systems using sphere/capsule overlap queries with filtered object types. Implement grabbable object physics with constraint components and proper mass scaling.</item>
+</list>
+
+<p><b>Shared Advanced Patterns (Both 2.5D & 3D)</b></p>
+<list listStyle="dash">
+  <item><b>Gameplay Ability System Integration:</b> Leverage GAS for movement abilities (double jump, dash, glide). Implement abilities using UGameplayAbility with root motion sources for physics-driven movement. Use GameplayEffects for temporary movement modifiers (speed boosts, slow fields).</item>
+  <item><b>Character Movement Component Customization:</b> Override key functions (PhysWalking, PhysFlying, OnMovementUpdated) for custom locomotion. Implement saved moves for network prediction with custom FSavedMove_Character extensions. Tune movement variables (MaxWalkSpeed, JumpZVelocity, AirControl, GravityScale) for responsive feel.</item>
+  <item><b>Animation State Machine Architecture:</b> Design modular state machines with clear state ownership. Implement transition rules using movement component queries and gameplay tag checks. Use anim notifies for tight gameplay-animation coupling (footstep sounds, hit windows, movement commits).</item>
+  <item><b>Network Replication Strategy:</b> Implement client-side prediction for movement with server reconciliation. Use compressed movement data (FCharacterNetworkMoveDataContainer) for bandwidth optimization. Design deterministic movement logic to minimize correction artifacts.</item>
+  <item><b>Input Buffer System:</b> Implement frame-perfect input buffering for responsive controls. Use circular buffers to store recent inputs with timestamp tracking. Process buffered inputs during state transitions for fluid combo systems.</item>
+  <item><b>Performance Profiling:</b> Use Unreal Insights for frame time analysis, stat commands (stat game, stat unit, stat fps) for real-time monitoring. Profile movement component tick costs and optimize expensive calculations using cached values or tick interval throttling.</item>
 </list>
 
 <p>---</p>

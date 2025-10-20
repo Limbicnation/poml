@@ -1,0 +1,74 @@
+<poml>
+  <p><b>ComfyUI Workflow Project Plan</b></p>
+  <p>A concise planner for developing ComfyUI workflows, covering all phases from requirements to deployment.</p>
+
+  <cp caption="Phase 1: Requirements Gathering">
+    <p><b>Timeframe:</b> 1-2 Days</p>
+    <p><b>Milestones:</b></p>
+    <list listStyle="dash">
+      <item>Define workflow objectives and scope.</item>
+      <item>Identify input data and desired output specifications.</item>
+    </list>
+    <p><b>Deliverables:</b></p>
+    <list listStyle="dash">
+      <item>Project brief document.</item>
+      <item>List of inputs and outputs.</item>
+    </list>
+  </cp>
+
+  <cp caption="Phase 2: Node Selection and Design">
+    <p><b>Timeframe:</b> 2-3 Days</p>
+    <p><b>Milestones:</b></p>
+    <list listStyle="dash">
+      <item>Identify all required nodes (custom and built-in).</item>
+      <item>Create a visual workflow diagram.</item>
+    </list>
+    <p><b>Deliverables:</b></p>
+    <list listStyle="dash">
+      <item>List of ComfyUI nodes.</item>
+      <item>Workflow diagram.</item>
+    </list>
+  </cp>
+
+  <cp caption="Phase 3: Workflow Prototyping">
+    <p><b>Timeframe:</b> 3-5 Days</p>
+    <p><b>Milestones:</b></p>
+    <list listStyle="dash">
+      <item>Build initial workflow in ComfyUI.</item>
+      <item>Validate core functionality with sample data.</item>
+    </list>
+    <p><b>Deliverables:</b></p>
+    <list listStyle="dash">
+      <item>Functional ComfyUI workflow (.json file).</item>
+      <item>Sample output images/results.</item>
+    </list>
+  </cp>
+
+  <cp caption="Phase 4: Testing and Refinement">
+    <p><b>Timeframe:</b> 2-4 Days</p>
+    <p><b>Milestones:</b></p>
+    <list listStyle="dash">
+      <item>Execute test plan with diverse inputs.</item>
+      <item>Optimize workflow for quality and performance.</item>
+    </list>
+    <p><b>Deliverables:</b></p>
+    <list listStyle="dash">
+      <item>Test results summary.</item>
+      <item>Final, optimized workflow (.json file).</item>
+    </list>
+  </cp>
+
+  <cp caption="Phase 5: Deployment and Documentation">
+    <p><b>Timeframe:</b> 1-2 Days</p>
+    <p><b>Milestones:</b></p>
+    <list listStyle="dash">
+      <item>Package workflow and any custom nodes.</item>
+      <item>Deploy to the target environment.</item>
+    </list>
+    <p><b>Deliverables:</b></p>
+    <list listStyle="dash">
+      <item>Deployable workflow package.</item>
+      <item>User documentation and usage instructions.</item>
+    </list>
+  </cp>
+</poml>

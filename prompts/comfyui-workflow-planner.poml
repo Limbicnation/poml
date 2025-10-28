@@ -39,6 +39,61 @@
     </list>
   </constraints>
 
+  <prerequisites>
+    <p><b>Hardware Requirements:</b></p>
+    <list listStyle="dash">
+      <item>NVIDIA GPU with CUDA support (minimum 8GB VRAM for SDXL, 4GB for SD 1.5)</item>
+      <item>16GB system RAM minimum (32GB recommended for complex workflows)</item>
+      <item>50GB+ free storage for models and workflows</item>
+      <item>SSD strongly recommended for model loading performance</item>
+    </list>
+
+    <p><b>Software Requirements:</b></p>
+    <list listStyle="dash">
+      <item>ComfyUI latest stable version (tested with 0.1.0+)</item>
+      <item>Python 3.10+ with pip package manager</item>
+      <item>CUDA Toolkit 11.8+ or 12.1+ (for NVIDIA GPUs)</item>
+      <item>Git for custom node installation</item>
+    </list>
+
+    <p><b>Recommended Setup:</b></p>
+    <list listStyle="dash">
+      <item>Virtual environment for Python dependencies</item>
+      <item>ComfyUI Manager for easy custom node installation</item>
+      <item>Organized model directory structure</item>
+      <item>Version control for workflow JSON files</item>
+    </list>
+  </prerequisites>
+
+  <glossary>
+    <p><b>Key ComfyUI Terminology:</b></p>
+    <list listStyle="dash">
+      <item><b>Node:</b> Functional unit representing an operation (e.g., KSampler, VAEDecode, CLIPTextEncode)</item>
+      <item><b>Workflow:</b> JSON file defining node connections and parameters for image generation pipeline</item>
+      <item><b>Latent Space:</b> Compressed representation used by diffusion models (typically 8x8x4 encoding of image)</item>
+      <item><b>Conditioning:</b> Text or image prompts encoded by CLIP/other encoders to guide model generation</item>
+      <item><b>CFG Scale:</b> Classifier-Free Guidance strength controlling prompt adherence (typical range: 1-20)</item>
+      <item><b>Sampler:</b> Denoising algorithm for generating images (euler, dpmpp_2m, dpmpp_sde, etc.)</item>
+      <item><b>Scheduler:</b> Step distribution strategy for sampler (normal, karras, exponential, sgm_uniform)</item>
+      <item><b>VAE:</b> Variational AutoEncoder for encoding images to latent space and decoding back</item>
+      <item><b>Checkpoint:</b> Trained model file (.safetensors or .ckpt) containing MODEL, CLIP, and VAE weights</item>
+      <item><b>LoRA:</b> Low-Rank Adaptation - small modifier files that adjust checkpoint behavior</item>
+      <item><b>ControlNet:</b> Neural network that guides generation using structural inputs (edges, depth, pose)</item>
+      <item><b>IP-Adapter:</b> Image Prompt Adapter for style/content transfer from reference images</item>
+    </list>
+
+    <p><b>Data Types:</b></p>
+    <list listStyle="dash">
+      <item><b>MODEL:</b> Base diffusion model for generation</item>
+      <item><b>CLIP:</b> Text encoder for processing prompts</item>
+      <item><b>VAE:</b> Encoder/decoder for latent-pixel conversion</item>
+      <item><b>CONDITIONING:</b> Encoded prompts (positive/negative)</item>
+      <item><b>LATENT:</b> Compressed image representation in latent space</item>
+      <item><b>IMAGE:</b> Pixel-space image data (after VAE decode)</item>
+      <item><b>MASK:</b> Binary or alpha channel for selective processing</item>
+    </list>
+  </glossary>
+
   <reasoning>
     <p><b>Before providing recommendations, analyze:</b></p>
     <list listStyle="number">
@@ -61,6 +116,29 @@
       <item>What are the output specifications? (resolution, format, quantity)</item>
       <item>Are there quality vs. speed trade-offs to consider?</item>
       <item>Will this workflow be user-facing or automated?</item>
+      <item>What is your GPU model and VRAM capacity? (critical for architecture decisions)</item>
+      <item>Do you need real-time preview during generation or final output only?</item>
+      <item>Will parameters need to be adjustable by end users? (impacts UI design)</item>
+      <item>Are there any specific custom nodes or extensions already in use?</item>
+      <item>What is the target generation time per image? (seconds, minutes)</item>
+    </list>
+
+    <p><b>Model Compatibility Reference:</b></p>
+    <list listStyle="dash">
+      <item><b>SD 1.5:</b> Base resolution 512x512, VRAM 4-6GB, fast generation, extensive LoRA support</item>
+      <item><b>SDXL 1.0:</b> Base resolution 1024x1024, VRAM 8-12GB, higher quality, slower generation</item>
+      <item><b>SD 2.1:</b> Base resolution 768x768, VRAM 6-8GB, different CLIP encoder</item>
+      <item><b>Cascade:</b> Multi-stage workflow, VRAM 16GB+, highest quality, very slow</item>
+      <item><b>LCM/Turbo:</b> Few-step models (4-8 steps), fast generation, lower quality ceiling</item>
+    </list>
+
+    <p><b>Critical Compatibility Checks:</b></p>
+    <list listStyle="dash">
+      <item>VAE compatibility: SDXL requires sdxl_vae.safetensors, SD1.5 uses vae-ft-mse-840000</item>
+      <item>CLIP compatibility: SDXL uses dual CLIP encoders, SD1.5 uses single encoder</item>
+      <item>ControlNet versions: Must match base model (controlnet-sd15 vs controlnet-sdxl)</item>
+      <item>LoRA architecture: SDXL LoRAs incompatible with SD1.5 and vice versa</item>
+      <item>Resolution constraints: Generating at non-native resolutions reduces quality</item>
     </list>
 
     <p><b>Deliverables:</b></p>
@@ -92,6 +170,162 @@
       <item>Design batching and iteration logic</item>
     </list>
 
+    <p><b>Essential Node Patterns by Use Case:</b></p>
+
+    <cp caption="Text-to-Image Base Workflow">
+      <p><b>Minimum Required Nodes (6 nodes):</b></p>
+      <list listStyle="number">
+        <item><b>CheckpointLoaderSimple:</b> Load base model (.safetensors or .ckpt file)</item>
+        <item><b>CLIPTextEncode (x2):</b> Positive and negative conditioning from text prompts</item>
+        <item><b>EmptyLatentImage:</b> Initialize latent canvas at target resolution (width x height)</item>
+        <item><b>KSampler:</b> Core generation node
+          <list listStyle="dash">
+            <item>steps: 20-30 (quality), 15-20 (speed)</item>
+            <item>cfg: 7-9 (SD1.5), 5-8 (SDXL)</item>
+            <item>sampler: euler/dpmpp_2m (recommended)</item>
+            <item>scheduler: karras (quality), normal (speed)</item>
+          </list>
+        </item>
+        <item><b>VAEDecode:</b> Convert latent representation to pixel-space image</item>
+        <item><b>SaveImage:</b> Output final result with configurable filename prefix</item>
+      </list>
+      <p><b>VRAM Usage:</b> ~6-8GB for SDXL 1024x1024, ~4-5GB for SD1.5 512x512</p>
+      <p><b>Generation Time:</b> 15-30 seconds (depending on GPU and steps)</p>
+    </cp>
+
+    <cp caption="ControlNet Integration Pattern">
+      <p><b>Additional Nodes Required:</b></p>
+      <list listStyle="number">
+        <item><b>LoadImage:</b> Import control reference image (edges, depth, pose, etc.)</item>
+        <item><b>ControlNetLoader:</b> Load ControlNet model matching base model version
+          <list listStyle="dash">
+            <item>SD1.5: control_v11p_sd15_canny, depth, openpose, etc.</item>
+            <item>SDXL: controlnet-canny-sdxl-1.0, etc.</item>
+          </list>
+        </item>
+        <item><b>ControlNetApply:</b> Apply control to conditioning
+          <list listStyle="dash">
+            <item>strength: 0.7-1.0 (higher = stronger structural control)</item>
+            <item>Connects to positive conditioning before KSampler</item>
+          </list>
+        </item>
+        <item><b>Preprocessor Node (optional):</b> Extract control signals
+          <list listStyle="dash">
+            <item>CannyEdgePreprocessor: low_threshold 100, high_threshold 200</item>
+            <item>DepthEstimator: MiDaS or ZoeDepth</item>
+            <item>OpenposePreprocessor: detect_hand, detect_face options</item>
+          </list>
+        </item>
+      </list>
+      <p><b>Connection Pattern:</b> Base CLIP conditioning → ControlNetApply → KSampler positive input</p>
+      <p><b>VRAM Overhead:</b> +1-2GB depending on ControlNet model size</p>
+      <p><b>Best For:</b> Maintaining composition, pose control, structure transfer</p>
+    </cp>
+
+    <cp caption="IP-Adapter Pattern (Image Prompting)">
+      <p><b>Key Nodes:</b></p>
+      <list listStyle="number">
+        <item><b>LoadImage:</b> Reference image for style/content extraction</item>
+        <item><b>IPAdapterModelLoader:</b> Load IP-Adapter weights
+          <list listStyle="dash">
+            <item>ip-adapter_sd15.bin for SD1.5</item>
+            <item>ip-adapter-plus_sdxl_vit-h.bin for SDXL</item>
+            <item>ip-adapter-faceid variants for face consistency</item>
+          </list>
+        </item>
+        <item><b>CLIPVisionLoader:</b> Load CLIP vision encoder for image analysis</item>
+        <item><b>IPAdapterApply:</b> Apply image conditioning to model
+          <list listStyle="dash">
+            <item>weight: 0.7-1.0 (style strength)</item>
+            <item>Can combine with text conditioning</item>
+          </list>
+        </item>
+      </list>
+      <p><b>VRAM Overhead:</b> +2-3GB for IP-Adapter + CLIP vision</p>
+      <p><b>Best For:</b> Style transfer, character consistency, reference-based generation</p>
+    </cp>
+
+    <cp caption="Upscaling Workflow Patterns">
+      <p><b>Latent-Space Upscaling (Fast):</b></p>
+      <list listStyle="dash">
+        <item><b>LatentUpscale or LatentUpscaleBy:</b> Scale latent 2x before VAE decode</item>
+        <item><b>KSampler with img2img:</b> Refine upscaled latent
+          <list listStyle="dash">
+            <item>denoise: 0.5-0.7 (controls refinement vs preservation)</item>
+            <item>steps: 15-25 (fewer than initial generation)</item>
+          </list>
+        </item>
+        <item><b>Pros:</b> VRAM efficient, fast, maintains coherence</item>
+        <item><b>Cons:</b> Quality ceiling lower than pixel-space methods</item>
+      </list>
+
+      <p><b>Pixel-Space Upscaling (Quality):</b></p>
+      <list listStyle="dash">
+        <item><b>ImageUpscaleWithModel:</b> Use ESRGAN/RealESRGAN models
+          <list listStyle="dash">
+            <item>4x-UltraSharp.pth for sharp details</item>
+            <item>RealESRGAN_x4plus.pth for photorealism</item>
+          </list>
+        </item>
+        <item><b>ImageScale:</b> Resize to exact target dimensions if needed</item>
+        <item><b>VAEEncode + KSampler (optional):</b> AI refinement pass
+          <list listStyle="dash">
+            <item>denoise: 0.3-0.5 (subtle refinement)</item>
+            <item>Requires VAEEncodeTiled for large images</item>
+          </list>
+        </item>
+        <item><b>Pros:</b> Best quality, fine detail preservation</item>
+        <item><b>Cons:</b> High VRAM (+3-5GB), slower, may introduce artifacts</item>
+      </list>
+    </cp>
+
+    <cp caption="Batch Processing Pattern">
+      <p><b>Key Configuration:</b></p>
+      <list listStyle="dash">
+        <item><b>PrimitiveNode (INT):</b> Define batch_size parameter as reusable variable</item>
+        <item><b>EmptyLatentImage:</b> Set batch_size input (connect from PrimitiveNode)</item>
+        <item><b>KSampler seed control:</b>
+          <list listStyle="dash">
+            <item>Fixed seed: All images in batch identical (for testing)</item>
+            <item>Random seed (-1): Each image unique</item>
+            <item>Seed array (custom node): Controlled variation</item>
+          </list>
+        </item>
+        <item><b>SaveImage:</b> Use filename_prefix with counter for auto-numbering</item>
+      </list>
+      <p><b>VRAM Scaling:</b> Linear increase (batch_size × per_image_vram)</p>
+      <p><b>GPU Limitations:</b> Most consumer GPUs limited to batch_size 1-4 for SDXL</p>
+      <p><b>Best For:</b> Generating variations, dataset creation, parameter sweeps</p>
+    </cp>
+
+    <cp caption="Advanced: Multi-Model Ensemble">
+      <p><b>Pattern Overview:</b></p>
+      <list listStyle="dash">
+        <item>Generate with Model A → Extract latent at partial completion</item>
+        <item>Switch to Model B → Continue generation from intermediate state</item>
+        <item>Combines strengths of different models (e.g., base + refiner)</item>
+      </list>
+
+      <p><b>Key Nodes:</b></p>
+      <list listStyle="dash">
+        <item><b>CheckpointLoader (x2):</b> Load both base and refiner models</item>
+        <item><b>KSampler (Stage 1):</b> Initial generation
+          <list listStyle="dash">
+            <item>steps: 25, denoise: 1.0</item>
+            <item>stop_at_step: 20 (exit before completion)</item>
+          </list>
+        </item>
+        <item><b>KSampler (Stage 2):</b> Refinement with different model
+          <list listStyle="dash">
+            <item>start_at_step: 20 (continue from previous)</item>
+            <item>steps: 25, denoise: 1.0</item>
+          </list>
+        </item>
+      </list>
+      <p><b>Example:</b> SDXL Base (steps 0-20) → SDXL Refiner (steps 20-25) for maximum quality</p>
+      <p><b>VRAM:</b> 14-18GB (both models loaded), use ModelUnload to reduce</p>
+    </cp>
+
     <p><b>Deliverables:</b></p>
     <list listStyle="dash">
       <item>Node architecture diagram with data flow visualization</item>
@@ -112,6 +346,117 @@
       <item>Add post-processing nodes (upscaling, color correction)</item>
       <item>Configure output and preview nodes</item>
       <item>Set up seed management for reproducibility</item>
+    </list>
+
+    <p><b>ComfyUI Workflow JSON Structure:</b></p>
+
+    <cp caption="JSON Format and Connection Syntax">
+      <p>ComfyUI workflows are JSON objects where each key is a unique node ID (string) and the value is the node configuration:</p>
+
+      <p><b>Basic Structure Example:</b></p>
+      <p>{</p>
+      <p>  "1": {</p>
+      <p>    "class_type": "CheckpointLoaderSimple",</p>
+      <p>    "inputs": {"ckpt_name": "sd_xl_base_1.0.safetensors"}</p>
+      <p>  },</p>
+      <p>  "2": {</p>
+      <p>    "class_type": "CLIPTextEncode",</p>
+      <p>    "inputs": {</p>
+      <p>      "text": "a beautiful landscape",</p>
+      <p>      "clip": ["1", 1]  // Reference node "1", output index 1</p>
+      <p>    }</p>
+      <p>  }</p>
+      <p>}</p>
+
+      <p><b>Connection Format:</b></p>
+      <list listStyle="dash">
+        <item>Array syntax: ["source_node_id", output_index]</item>
+        <item>Output indices start at 0</item>
+        <item>Type safety: ComfyUI validates connection types at load time</item>
+        <item>String node IDs required (numeric strings like "1", "2", "3")</item>
+      </list>
+
+      <p><b>Common Output Indices by Node Type:</b></p>
+      <list listStyle="dash">
+        <item><b>CheckpointLoaderSimple:</b> [0]=MODEL, [1]=CLIP, [2]=VAE</item>
+        <item><b>CLIPTextEncode:</b> [0]=CONDITIONING</item>
+        <item><b>KSampler:</b> [0]=LATENT</item>
+        <item><b>VAEDecode:</b> [0]=IMAGE</item>
+        <item><b>LoadImage:</b> [0]=IMAGE, [1]=MASK</item>
+        <item><b>ControlNetLoader:</b> [0]=CONTROL_NET</item>
+        <item><b>ControlNetApply:</b> [0]=CONDITIONING</item>
+      </list>
+    </cp>
+
+    <cp caption="Complete Minimal Workflow Example">
+      <p><b>6-Node Text-to-Image Workflow JSON:</b></p>
+      <p>{</p>
+      <p>  "1": {</p>
+      <p>    "class_type": "CheckpointLoaderSimple",</p>
+      <p>    "inputs": {"ckpt_name": "sd_xl_base_1.0.safetensors"}</p>
+      <p>  },</p>
+      <p>  "2": {</p>
+      <p>    "class_type": "CLIPTextEncode",</p>
+      <p>    "inputs": {</p>
+      <p>      "text": "masterpiece, best quality, beautiful landscape",</p>
+      <p>      "clip": ["1", 1]</p>
+      <p>    }</p>
+      <p>  },</p>
+      <p>  "3": {</p>
+      <p>    "class_type": "CLIPTextEncode",</p>
+      <p>    "inputs": {</p>
+      <p>      "text": "low quality, blurry, bad",</p>
+      <p>      "clip": ["1", 1]</p>
+      <p>    }</p>
+      <p>  },</p>
+      <p>  "4": {</p>
+      <p>    "class_type": "EmptyLatentImage",</p>
+      <p>    "inputs": {"width": 1024, "height": 1024, "batch_size": 1}</p>
+      <p>  },</p>
+      <p>  "5": {</p>
+      <p>    "class_type": "KSampler",</p>
+      <p>    "inputs": {</p>
+      <p>      "model": ["1", 0],</p>
+      <p>      "positive": ["2", 0],</p>
+      <p>      "negative": ["3", 0],</p>
+      <p>      "latent_image": ["4", 0],</p>
+      <p>      "seed": 12345,</p>
+      <p>      "steps": 25,</p>
+      <p>      "cfg": 7.0,</p>
+      <p>      "sampler_name": "dpmpp_2m",</p>
+      <p>      "scheduler": "karras",</p>
+      <p>      "denoise": 1.0</p>
+      <p>    }</p>
+      <p>  },</p>
+      <p>  "6": {</p>
+      <p>    "class_type": "VAEDecode",</p>
+      <p>    "inputs": {</p>
+      <p>      "samples": ["5", 0],</p>
+      <p>      "vae": ["1", 2]</p>
+      <p>    }</p>
+      <p>  },</p>
+      <p>  "7": {</p>
+      <p>    "class_type": "SaveImage",</p>
+      <p>    "inputs": {</p>
+      <p>      "images": ["6", 0],</p>
+      <p>      "filename_prefix": "output"</p>
+      <p>    }</p>
+      <p>  }</p>
+      <p>}</p>
+
+      <p><b>Data Flow:</b> Checkpoint → CLIP (text) → KSampler (generation) → VAE (decode) → Save</p>
+      <p><b>Expected Output:</b> Single 1024x1024 image saved as "output_00001.png"</p>
+    </cp>
+
+    <p><b>JSON Validation Checklist:</b></p>
+    <list listStyle="check">
+      <item>All node IDs are unique strings (no duplicates)</item>
+      <item>All referenced node IDs exist in the workflow</item>
+      <item>Output indices match the source node's return types</item>
+      <item>Required inputs for each node class_type are provided</item>
+      <item>File paths (models, images) are valid and accessible</item>
+      <item>No circular dependencies in node connections</item>
+      <item>Valid JSON syntax (proper quotes, commas, brackets)</item>
     </list>
 
     <p><b>Validation Steps:</b></p>
@@ -151,6 +496,173 @@
       <item><b>Memory:</b> Implement efficient VAE decoding, manage model loading</item>
       <item><b>Stability:</b> Add error handling, validate inputs, manage resources</item>
     </list>
+
+    <p><b>Specific Optimization Techniques:</b></p>
+
+    <cp caption="Speed Optimization Strategies">
+      <p><b>Sampler Selection (20-50% speed improvement):</b></p>
+      <list listStyle="dash">
+        <item><b>Fastest:</b> euler_a, lcm (4-8 steps, 5-10 seconds)</item>
+        <item><b>Balanced:</b> dpmpp_2m, euler (20-25 steps, 15-25 seconds)</item>
+        <item><b>Quality:</b> dpmpp_2m_karras, dpmpp_3m_sde (30-40 steps, 30-50 seconds)</item>
+        <item><b>Recommendation:</b> Start with dpmpp_2m at 25 steps, reduce if speed critical</item>
+      </list>
+
+      <p><b>Step Reduction Strategy:</b></p>
+      <list listStyle="dash">
+        <item>Test quality at: 40 → 30 → 25 → 20 → 15 steps</item>
+        <item>Most models: 20-25 steps sufficient for good quality</item>
+        <item>Speed gain: 30-40% (40 steps → 25 steps)</item>
+        <item>Quality loss: Minimal (5-10%) if above 20 steps</item>
+        <item>LCM models: 4-8 steps only, dramatic speed boost</item>
+      </list>
+
+      <p><b>Resolution Workflow Optimization:</b></p>
+      <list listStyle="dash">
+        <item><b>Method:</b> Generate at 768px → upscale to 1024px vs native 1024px</item>
+        <item><b>Speed gain:</b> 40-60% faster total (including upscale)</item>
+        <item><b>Quality:</b> Often better due to upscaling refinement</item>
+        <item><b>Implementation:</b> LatentUpscale + KSampler (denoise 0.5-0.6)</item>
+      </list>
+
+      <p><b>VAE Optimization:</b></p>
+      <list listStyle="dash">
+        <item>Use VAEDecodeTiled for images &gt;1536px (saves 30-40% time)</item>
+        <item>Tile size: 512 for SD1.5, 1024 for SDXL</item>
+        <item>Prevents VRAM spikes during decode</item>
+      </list>
+
+      <p><b>Model Caching:</b></p>
+      <list listStyle="dash">
+        <item>Keep models loaded between runs (avoid CheckpointLoader reloads)</item>
+        <item>Use --keep-models flag when launching ComfyUI</item>
+        <item>Speed gain: 2-5 seconds per generation (model load time)</item>
+      </list>
+
+      <p><b>Expected Results:</b></p>
+      <list listStyle="dash">
+        <item>Combined optimizations: 50-70% speed improvement</item>
+        <item>Example: 45s → 18s per image (SDXL 1024px)</item>
+        <item>Quality loss: &lt;10% with proper settings</item>
+      </list>
+    </cp>
+
+    <cp caption="VRAM Optimization Strategies">
+      <p><b>Model Management (2-6GB savings):</b></p>
+      <list listStyle="dash">
+        <item><b>Launch flags:</b>
+          <list listStyle="plus">
+            <item>--lowvram: Model stays in system RAM, moves to GPU as needed (8GB GPUs)</item>
+            <item>--normalvram: Standard behavior (12GB+ GPUs)</item>
+            <item>--highvram: Keep everything on GPU (24GB+ GPUs)</item>
+          </list>
+        </item>
+        <item><b>FP16 models:</b> Use float16 checkpoints (50% VRAM reduction)</item>
+        <item><b>ModelUnload node:</b> Explicitly unload models between stages</item>
+        <item><b>Model quantization:</b> Use GGUF or quantized models (30-50% smaller)</item>
+      </list>
+
+      <p><b>Batch Size Reduction:</b></p>
+      <list listStyle="dash">
+        <item>Reduce from batch_size 4 → 1 for SDXL (75% VRAM reduction)</item>
+        <item>Use sequential generation instead of batching</item>
+        <item>VRAM per image: 8GB (SDXL), 4GB (SD1.5)</item>
+      </list>
+
+      <p><b>VAE Tiling (2-4GB savings):</b></p>
+      <list listStyle="dash">
+        <item>VAEEncodeTiled / VAEDecodeTiled for large images</item>
+        <item>Critical for images &gt;1536px or batch processing</item>
+        <item>Tile size 512-1024 depending on model</item>
+        <item>Minimal quality impact</item>
+      </list>
+
+      <p><b>Attention Optimization:</b></p>
+      <list listStyle="dash">
+        <item>Launch with --attention-pytorch or --attention-split flags</item>
+        <item>Use xformers if available (10-20% VRAM reduction)</item>
+        <item>Enable in ComfyUI settings: "Attention: xformers"</item>
+      </list>
+
+      <p><b>VRAM Usage Benchmarks:</b></p>
+      <list listStyle="dash">
+        <item><b>SD1.5 base:</b> 3-4GB → with ControlNet: 5-6GB → with upscale: 7-8GB</item>
+        <item><b>SDXL base:</b> 7-9GB → with ControlNet: 10-12GB → with Refiner: 12-16GB</item>
+        <item><b>SDXL + tiling:</b> 5-7GB (large images)</item>
+      </list>
+    </cp>
+
+    <cp caption="Quality Optimization Strategies">
+      <p><b>CFG Scale Tuning:</b></p>
+      <list listStyle="dash">
+        <item><b>SD1.5 optimal range:</b> 7-9 (sweet spot at 7.5)</item>
+        <item><b>SDXL optimal range:</b> 5-8 (sweet spot at 6-7)</item>
+        <item><b>Too low (&lt;5):</b> Ignores prompt, washed out</item>
+        <item><b>Too high (&gt;12 SD1.5, &gt;10 SDXL):</b> Oversaturated, artifacts</item>
+        <item><b>ControlNet adjustment:</b> Reduce base CFG by 1-2 points</item>
+      </list>
+
+      <p><b>Sampler/Scheduler Pairing:</b></p>
+      <list listStyle="dash">
+        <item><b>Best overall quality:</b> dpmpp_2m + karras</item>
+        <item><b>Photorealism:</b> dpmpp_sde + karras (slower but better details)</item>
+        <item><b>Artistic/creative:</b> euler_a + normal (more variation)</item>
+        <item><b>Consistency:</b> dpmpp_2m + normal (more predictable)</item>
+        <item><b>Avoid:</b> euler + karras (quality issues)</item>
+      </list>
+
+      <p><b>Resolution Matching:</b></p>
+      <list listStyle="dash">
+        <item><b>SD1.5 native:</b> 512x512 (best), 512x768 portrait, 768x512 landscape</item>
+        <item><b>SDXL native:</b> 1024x1024 (best), 1024x1536, 1536x1024</item>
+        <item><b>Rule:</b> Stay within ±25% of native resolution</item>
+        <item><b>Non-native penalty:</b> Quality degrades, composition issues</item>
+        <item><b>Solution:</b> Generate at native, then upscale or crop</item>
+      </list>
+
+      <p><b>Prompt Engineering Best Practices:</b></p>
+      <list listStyle="dash">
+        <item><b>Structure:</b> [Subject] + [details] + [style] + [quality boosters]</item>
+        <item><b>Quality boosters:</b> "masterpiece, best quality, highly detailed, 8k"</item>
+        <item><b>Negative prompt:</b> "low quality, blurry, artifacts, bad anatomy, watermark"</item>
+        <item><b>Weight syntax:</b> (keyword:1.2) to emphasize, (keyword:0.8) to de-emphasize</item>
+        <item><b>Key subjects first:</b> Model pays most attention to start of prompt</item>
+      </list>
+
+      <p><b>VAE Selection:</b></p>
+      <list listStyle="dash">
+        <item><b>SD1.5:</b> vae-ft-mse-840000 (standard), blessed2.vae (vibrant colors)</item>
+        <item><b>SDXL:</b> sdxl_vae.safetensors (official), sdxl-vae-fp16-fix (stability)</item>
+        <item><b>Broken VAE symptoms:</b> Blurry, washed out, incorrect colors</item>
+        <item><b>Test:</b> Try different VAEs if quality unexpectedly poor</item>
+      </list>
+    </cp>
+
+    <cp caption="Stability and Error Prevention">
+      <p><b>Input Validation:</b></p>
+      <list listStyle="dash">
+        <item>Verify model files exist before workflow execution</item>
+        <item>Check resolution values are multiples of 8 (latent constraint)</item>
+        <item>Validate seed range (-1 for random, 0+ for fixed)</item>
+        <item>Ensure batch_size fits in available VRAM</item>
+      </list>
+
+      <p><b>Resource Management:</b></p>
+      <list listStyle="dash">
+        <item>Add ModelUnload nodes between heavy operations</item>
+        <item>Use preview nodes strategically (avoid excessive previews)</item>
+        <item>Implement timeout handling for long operations</item>
+        <item>Monitor VRAM usage with nvidia-smi</item>
+      </list>
+
+      <p><b>Error Handling Patterns:</b></p>
+      <list listStyle="dash">
+        <item>Wrap critical nodes in try-catch (if custom nodes support)</item>
+        <item>Add fallback VAE if primary fails to load</item>
+        <item>Implement automatic step reduction on OOM errors</item>
+        <item>Log all errors to file for debugging</item>
+      </list>
+    </cp>
 
     <p><b>Deliverables:</b></p>
     <list listStyle="dash">
@@ -214,11 +726,298 @@
     </format>
 
     <examples>
-      <p><b>Example Query 1: "I need a workflow for generating consistent character portraits"</b></p>
-      <p>Response should include: IP-Adapter setup for character consistency, appropriate checkpoint selection, face fixing nodes, seed management strategy, and batch processing configuration.</p>
+      <cp caption="Example 1: Consistent Character Portrait Workflow">
+        <p><b>User Query:</b> "I need a workflow for generating consistent character portraits with the same face across multiple images"</p>
 
-      <p><b>Example Query 2: "How do I optimize my workflow for faster generation?"</b></p>
-      <p>Response should analyze: Current sampler steps, CFG scale efficiency, VAE decoding strategy, model loading optimization, and redundant node elimination.</p>
+        <p><b>Analysis Summary:</b></p>
+        <list listStyle="dash">
+          <item>Consistency requirement indicates IP-Adapter or FaceID approach needed</item>
+          <item>Portrait focus suggests face-fixing nodes and higher CFG for prompt adherence</item>
+          <item>Multiple images implies batch processing or seed variation strategy</item>
+          <item>Estimated VRAM: 6-7GB (SD1.5 + IP-Adapter) or 10-12GB (SDXL + IP-Adapter)</item>
+        </list>
+
+        <p><b>Recommended Architecture (9 nodes):</b></p>
+        <list listStyle="decimal">
+          <item><b>CheckpointLoaderSimple:</b> Portrait-optimized model (realisticVision, epicRealism, or similar)</item>
+          <item><b>LoadImage:</b> Reference face image (clear, well-lit, 512x512+ resolution)</item>
+          <item><b>IPAdapterModelLoader:</b> ip-adapter-faceid-plus_sd15.bin for face consistency</item>
+          <item><b>CLIPVisionLoader:</b> CLIP vision encoder for image analysis</item>
+          <item><b>IPAdapterApply:</b> Apply face reference to model (weight: 0.8-1.0 for strong consistency)</item>
+          <item><b>CLIPTextEncode (x2):</b> Positive: "portrait of person, [varied description]" / Negative: "blurry face, deformed, multiple faces"</item>
+          <item><b>EmptyLatentImage:</b> 512x704 (portrait aspect ratio) or 512x768</item>
+          <item><b>KSampler:</b> euler_a sampler, 25 steps, CFG 8 (higher for prompt adherence), seed variation for diversity</item>
+          <item><b>VAEDecode + SaveImage:</b> Output with seed in filename for tracking</item>
+        </list>
+
+        <p><b>Implementation Details:</b></p>
+        <list listStyle="dash">
+          <item><b>IP-Adapter settings:</b>
+            <list listStyle="plus">
+              <item>weight: 0.8-1.0 (0.8 allows more variation, 1.0 maximum consistency)</item>
+              <item>Model: ip-adapter-faceid-plus for best face consistency</item>
+              <item>Reference image quality critical: sharp, front-facing, good lighting</item>
+            </list>
+          </item>
+          <item><b>Seed strategy:</b>
+            <list listStyle="plus">
+              <item>Fixed seed + varied prompts: Same face, different styles/expressions</item>
+              <item>Seed increment (12345, 12346, 12347): Controlled variations</item>
+              <item>Random seed with high IP-Adapter weight: Diverse poses, same face</item>
+            </list>
+          </item>
+          <item><b>Prompt engineering:</b>
+            <list listStyle="plus">
+              <item>Keep face description generic ("person", "individual") since IP-Adapter provides face</item>
+              <item>Focus prompts on: Expression, pose, clothing, background, lighting</item>
+              <item>Negative prompt critical: "deformed face, bad anatomy, multiple people"</item>
+            </list>
+          </item>
+        </list>
+
+        <p><b>Optional Enhancements:</b></p>
+        <list listStyle="dash">
+          <item><b>FaceRestore Node:</b> CodeFormer or GFPGAN for quality boost (adds 1-2GB VRAM)</item>
+          <item><b>ControlNet (OpenPose):</b> For consistent body poses across images (adds 1-2GB VRAM)</item>
+          <item><b>Upscaling:</b> LatentUpscale to 1024x1408 for higher resolution output</item>
+        </list>
+
+        <p><b>Expected Results:</b></p>
+        <list listStyle="dash">
+          <item>Face consistency: 85-95% (same person recognizable across all images)</item>
+          <item>Generation time: 10-15 seconds per image (SD1.5 on RTX 3060)</item>
+          <item>VRAM usage: 6-7GB peak</item>
+          <item>Quality: High detail faces, consistent facial features</item>
+        </list>
+
+        <p><b>Next Steps:</b></p>
+        <list listStyle="decimal">
+          <item>Test IP-Adapter weight range (0.6-1.0) to find sweet spot for your use case</item>
+          <item>Generate test batch of 10 images to validate consistency</item>
+          <item>Adjust CFG scale if faces don't match prompts well</item>
+          <item>Consider adding ControlNet if body pose consistency also needed</item>
+        </list>
+      </cp>
+
+      <cp caption="Example 2: Workflow Speed Optimization">
+        <p><b>User Query:</b> "My SDXL workflow takes 45 seconds per image. How can I optimize for faster generation without losing too much quality?"</p>
+
+        <p><b>Current Setup Analysis:</b></p>
+        <list listStyle="dash">
+          <item>Assumed current: SDXL 1024x1024, dpmpp_3m_sde sampler, 35 steps, CFG 7</item>
+          <item>Performance: 45s/image indicates standard SDXL workflow on mid-range GPU (RTX 3080/3090)</item>
+          <item>Target: 20-30s/image (30-50% improvement) with minimal quality loss</item>
+        </list>
+
+        <p><b>Optimization Strategy (Progressive):</b></p>
+
+        <p><b>Tier 1: Quick Wins (10-15s savings, &lt;5% quality impact):</b></p>
+        <list listStyle="decimal">
+          <item><b>Sampler change:</b> dpmpp_3m_sde → dpmpp_2m_karras
+            <list listStyle="dash">
+              <item>Speed gain: 8-12 seconds (20-25% faster)</item>
+              <item>Quality impact: Minimal, dpmpp_2m_karras often preferred for quality</item>
+              <item>Implementation: Change sampler_name in KSampler node</item>
+            </list>
+          </item>
+          <item><b>Step reduction:</b> 35 steps → 25 steps
+            <list listStyle="dash">
+              <item>Speed gain: 10-12 seconds (28% fewer steps)</item>
+              <item>Quality impact: &lt;5%, most SDXL models converge well by 25 steps</item>
+              <item>Test: Compare output at 35 vs 25 steps to verify acceptable</item>
+            </list>
+          </item>
+        </list>
+        <p><b>Tier 1 Result:</b> 45s → 23-25s (44-48% faster), quality loss &lt;5%</p>
+
+        <p><b>Tier 2: Moderate Optimizations (5-8s additional savings, 5-10% quality impact):</b></p>
+        <list listStyle="decimal">
+          <item><b>Resolution workflow:</b> Generate at 768px, upscale to 1024px
+            <list listStyle="dash">
+              <item>Change EmptyLatentImage: 1024→768 (width and height)</item>
+              <item>Add LatentUpscale node (scale_by: 1.33, method: bilinear)</item>
+              <item>Add refinement KSampler (denoise: 0.5-0.6, steps: 15-20)</item>
+              <item>Speed gain: 5-8 seconds additional</item>
+              <item>Quality: Often BETTER due to refinement pass</item>
+            </list>
+          </item>
+          <item><b>VAE Tiling:</b> Use VAEDecodeTiled
+            <list listStyle="dash">
+              <item>Replace VAEDecode with VAEDecodeTiled</item>
+              <item>Speed gain: 2-3 seconds (reduces VRAM pressure)</item>
+              <item>Quality impact: None (identical output)</item>
+            </list>
+          </item>
+        </list>
+        <p><b>Tier 2 Result:</b> 23-25s → 15-18s (total 60-62% faster than original), quality comparable or better</p>
+
+        <p><b>Tier 3: Aggressive Optimizations (extreme speed, 15-25% quality trade-off):</b></p>
+        <list listStyle="decimal">
+          <item><b>LCM-SDXL model:</b> Switch to Latent Consistency Model
+            <list listStyle="dash">
+              <item>Load LCM-SDXL checkpoint, use LCM sampler, 4-8 steps</item>
+              <item>Result: 5-8 seconds per image (85% speed improvement)</item>
+              <item>Trade-off: 15-20% quality reduction, less detail refinement</item>
+              <item>Best for: Rapid iteration, previews, concepts</item>
+            </list>
+          </item>
+          <item><b>Extreme step reduction:</b> 25 steps → 15 steps
+            <list listStyle="dash">
+              <item>Only if using fast sampler (euler_a)</item>
+              <item>Speed gain: Additional 5-7 seconds</item>
+              <item>Quality impact: 10-15% (softer details, less refinement)</item>
+            </list>
+          </item>
+        </list>
+
+        <p><b>Recommended Implementation (Tier 1 + Tier 2):</b></p>
+        <list listStyle="dash">
+          <item>Sampler: dpmpp_2m_karras</item>
+          <item>Steps: 25</item>
+          <item>Resolution: 768→1024 with upscale refinement</item>
+          <item>VAE: Tiled decoding</item>
+          <item><b>Final speed: 15-18s per image (60% faster)</b></item>
+          <item><b>Quality: 90-95% of original, often subjectively better</b></item>
+        </list>
+
+        <p><b>Before/After Comparison:</b></p>
+        <list listStyle="dash">
+          <item><b>Before:</b> dpmpp_3m_sde, 35 steps, 1024px native, standard VAE = 45s</item>
+          <item><b>After:</b> dpmpp_2m_karras, 25 steps, 768→1024px workflow, tiled VAE = 17s</item>
+          <item><b>Savings:</b> 28 seconds per image (62% faster)</item>
+          <item><b>Quality:</b> Comparable detail, smoother upscaling, better refinement</item>
+        </list>
+
+        <p><b>Alternative (Extreme Speed):</b></p>
+        <list listStyle="dash">
+          <item>Use LCM-SDXL + 6 steps + 1024px = 6-8s per image</item>
+          <item>85% speed improvement vs original</item>
+          <item>Best for rapid prototyping, not final output</item>
+        </list>
+      </cp>
+
+      <cp caption="Example 3: Multi-Stage ControlNet Workflow">
+        <p><b>User Query:</b> "I want to create a workflow that generates an image, then uses it as a ControlNet input for a second generation with different styling"</p>
+
+        <p><b>Analysis Summary:</b></p>
+        <list listStyle="dash">
+          <item>Two-stage workflow: Stage 1 (base generation) → Stage 2 (controlled restyling)</item>
+          <item>ControlNet type needs to preserve structure: Canny (edges) or Depth (3D structure)</item>
+          <item>Style change implies different checkpoint or prompts in Stage 2</item>
+          <item>Total VRAM: 7-9GB (SD1.5 both stages + ControlNet)</item>
+        </list>
+
+        <p><b>Workflow Architecture (13 nodes total):</b></p>
+
+        <p><b>Stage 1: Base Image Generation (6 nodes):</b></p>
+        <list listStyle="decimal">
+          <item>CheckpointLoaderSimple: Realistic model (e.g., realisticVision)</item>
+          <item>CLIPTextEncode (x2): Positive: "realistic portrait of woman, natural lighting" / Negative: standard</item>
+          <item>EmptyLatentImage: 512x512</item>
+          <item>KSampler: euler_a, 25 steps, CFG 7, seed 12345</item>
+          <item>VAEDecode: Convert to IMAGE</item>
+          <item>SaveImage: Save stage 1 output (optional, for reference)</item>
+        </list>
+
+        <p><b>Stage 2: ControlNet Restyling (7 nodes):</b></p>
+        <list listStyle="decimal">
+          <item><b>Stage 1 IMAGE →</b> CannyEdgePreprocessor: Extract edge structure
+            <list listStyle="dash">
+              <item>low_threshold: 100, high_threshold: 200</item>
+              <item>Output: Black/white edge map</item>
+            </list>
+          </item>
+          <item>ControlNetLoader: control_v11p_sd15_canny [726MB]</item>
+          <item>CheckpointLoaderSimple: Artistic model (e.g., dreamshaper, analogMadness)</item>
+          <item>CLIPTextEncode (x2): Positive: "oil painting of woman, van gogh style, artistic, impressionism" / Negative: "photorealistic, photograph"</item>
+          <item>ControlNetApply: Apply edges to conditioning
+            <list listStyle="dash">
+              <item>strength: 0.85 (strong structure preservation)</item>
+              <item>Connect to positive conditioning from Stage 2 CLIP</item>
+            </list>
+          </item>
+          <item>EmptyLatentImage: 512x512 (same as Stage 1)</item>
+          <item>KSampler: euler_a, 20 steps, CFG 7 (can be slightly lower with ControlNet)</item>
+          <item>VAEDecode + SaveImage: Final artistic output</item>
+        </list>
+
+        <p><b>Key Implementation Details:</b></p>
+
+        <p><b>ControlNet Configuration:</b></p>
+        <list listStyle="dash">
+          <item><b>Canny (edges):</b> Best for preserving composition, outlines, structure
+            <list listStyle="plus">
+              <item>Strength 0.8-1.0: Very strict edge adherence</item>
+              <item>Strength 0.5-0.7: Looser interpretation, more creative freedom</item>
+            </list>
+          </item>
+          <item><b>Alternative: Depth ControlNet:</b>
+            <list listStyle="plus">
+              <item>Preserves 3D structure better (foreground/background relationships)</item>
+              <item>Use DepthEstimator (MiDaS or ZoeDepth) instead of Canny preprocessor</item>
+              <item>Better for scenes with depth, not ideal for flat portraits</item>
+            </list>
+          </item>
+        </list>
+
+        <p><b>Prompt Strategy:</b></p>
+        <list listStyle="dash">
+          <item><b>Stage 1:</b> Focus on base content ("portrait of woman, natural lighting")</item>
+          <item><b>Stage 2:</b> Focus on style ("oil painting, van gogh, impressionism, artistic")</item>
+          <item>ControlNet ensures same face/pose, prompt changes artistic style</item>
+          <item>Negative in Stage 2 should exclude Stage 1 style ("photorealistic" if going artistic)</item>
+        </list>
+
+        <p><b>Checkpoint Selection:</b></p>
+        <list listStyle="dash">
+          <item><b>Option 1: Different models</b>
+            <list listStyle="plus">
+              <item>Stage 1: Realistic model (realisticVision, epicRealism)</item>
+              <item>Stage 2: Artistic model (dreamshaper, analogMadness)</item>
+              <item>VRAM impact: Both loaded simultaneously = 7-9GB total</item>
+            </list>
+          </item>
+          <item><b>Option 2: Same model</b>
+            <list listStyle="plus">
+              <item>Use versatile model (deliberate, dreamshaper) for both stages</item>
+              <item>Style change purely from prompts + ControlNet</item>
+              <item>VRAM savings: Only 1 checkpoint loaded = 5-6GB total</item>
+            </list>
+          </item>
+        </list>
+
+        <p><b>VRAM Optimization:</b></p>
+        <list listStyle="dash">
+          <item>If VRAM limited (&lt;8GB): Add ModelUnload node between stages</item>
+          <item>Unload Stage 1 checkpoint before loading Stage 2</item>
+          <item>Trade-off: 2-3 second model loading delay between stages</item>
+        </list>
+
+        <p><b>Expected Results:</b></p>
+        <list listStyle="dash">
+          <item>Stage 1: Realistic portrait, natural style, 10-15s generation</item>
+          <item>Stage 2: Same face/composition, artistic style, 12-18s generation</item>
+          <item>Total time: 22-33 seconds for complete workflow</item>
+          <item>Structure preservation: 90-95% (face, pose, composition identical)</item>
+          <item>Style transformation: Complete (photorealistic → painterly)</item>
+        </list>
+
+        <p><b>Extension Ideas:</b></p>
+        <list listStyle="dash">
+          <item><b>Three-stage:</b> Base → ControlNet style 1 → ControlNet style 2</item>
+          <item><b>Multiple ControlNets:</b> Canny + Depth simultaneously for stronger control</item>
+          <item><b>Img2Img refinement:</b> Use Stage 1 output in VAEEncode → KSampler (denoise 0.7)</item>
+          <item><b>Batch variations:</b> Single Stage 1, multiple Stage 2 with different style prompts</item>
+        </list>
+
+        <p><b>Troubleshooting Tips:</b></p>
+        <list listStyle="dash">
+          <item>If Stage 2 ignores ControlNet: Increase strength to 0.9-1.0</item>
+          <item>If Stage 2 too rigid: Decrease strength to 0.6-0.7, reduce CFG to 6</item>
+          <item>If edges too harsh: Increase Canny low_threshold (100→150)</item>
+          <item>If composition breaks: Check ControlNet strength, verify preprocessor output</item>
+        </list>
+      </cp>
     </examples>
   </output>
 
@@ -234,4 +1033,228 @@
       <item>Workflow is reproducible with provided parameters</item>
     </list>
   </qualityChecklist>
+
+  <troubleshooting>
+    <p><b>Common Issues and Solutions:</b></p>
+
+    <cp caption="Error: Out of Memory / CUDA Out of Memory">
+      <p><b>Symptoms:</b> Generation crashes mid-process, ComfyUI freezes, CUDA error messages</p>
+
+      <p><b>Common Causes:</b></p>
+      <list listStyle="dash">
+        <item>Batch size too large for available VRAM</item>
+        <item>Resolution too high (SDXL at 2048px+ or SD1.5 at 1024px+)</item>
+        <item>Multiple models loaded simultaneously (base + refiner + ControlNet)</item>
+        <item>Memory leak from previous runs (models not unloaded)</item>
+        <item>VAE decode without tiling on large images</item>
+      </list>
+
+      <p><b>Solutions (try in order):</b></p>
+      <list listStyle="number">
+        <item>Reduce batch_size to 1 in EmptyLatentImage node</item>
+        <item>Lower resolution: 1024→768 for SDXL, 512→384 for SD1.5</item>
+        <item>Launch ComfyUI with --lowvram or --normalvram flag</item>
+        <item>Enable VAE tiling: Use VAEDecodeTiled instead of VAEDecode</item>
+        <item>Restart ComfyUI to clear memory (File → Reload or Ctrl+R)</item>
+        <item>Use fp16 model checkpoints instead of fp32 (50% VRAM savings)</item>
+        <item>Add ModelUnload nodes between heavy operations</item>
+        <item>Close other GPU-using applications (browsers with hardware acceleration)</item>
+      </list>
+
+      <p><b>Prevention:</b></p>
+      <list listStyle="dash">
+        <item>Monitor VRAM usage: nvidia-smi in terminal (update every 1s: watch -n 1 nvidia-smi)</item>
+        <item>Know your limits: 8GB GPU = SD1.5 only, 12GB = SDXL base, 16GB+ = SDXL + ControlNet</item>
+      </list>
+    </cp>
+
+    <cp caption="Error: Node connection type mismatch">
+      <p><b>Example Errors:</b></p>
+      <list listStyle="dash">
+        <item>"Cannot connect IMAGE to LATENT input"</item>
+        <item>"Expected CONDITIONING, got IMAGE"</item>
+        <item>"Type mismatch at node X input Y"</item>
+      </list>
+
+      <p><b>Solutions:</b></p>
+      <list listStyle="dash">
+        <item><b>IMAGE → LATENT:</b> Add VAEEncode node between them</item>
+        <item><b>LATENT → IMAGE:</b> Add VAEDecode node between them</item>
+        <item><b>Check output index:</b> LoadImage outputs [0]=IMAGE and [1]=MASK (not just IMAGE)</item>
+        <item><b>Verify node compatibility:</b> Some custom nodes output non-standard types</item>
+        <item><b>Update custom nodes:</b> Type system may have changed in newer versions</item>
+      </list>
+
+      <p><b>Quick Reference - Type Conversions:</b></p>
+      <list listStyle="dash">
+        <item>IMAGE → LATENT: VAEEncode (requires VAE input)</item>
+        <item>LATENT → IMAGE: VAEDecode (requires VAE input)</item>
+        <item>Text → CONDITIONING: CLIPTextEncode (requires CLIP input)</item>
+        <item>IMAGE → CONDITIONING: CLIPVisionEncode (for IP-Adapter workflows)</item>
+      </list>
+    </cp>
+
+    <cp caption="Error: Model file not found / Invalid checkpoint">
+      <p><b>Example Errors:</b></p>
+      <list listStyle="dash">
+        <item>"Could not find checkpoint: model.safetensors"</item>
+        <item>"Error loading model file"</item>
+        <item>"Invalid safetensors header"</item>
+      </list>
+
+      <p><b>Solutions:</b></p>
+      <list listStyle="number">
+        <item>Verify model file exists in ComfyUI/models/checkpoints/ directory</item>
+        <item>Check filename matches exactly (case-sensitive on Linux/Mac)</item>
+        <item>Ensure file has .safetensors or .ckpt extension</item>
+        <item>Verify file permissions (should be readable by ComfyUI process)</item>
+        <item>Check file isn't corrupted: Re-download if filesize incorrect</item>
+        <item>For symlinks: Verify link target exists (ls -la to check)</item>
+        <item>Update model paths in workflow JSON if files moved</item>
+      </list>
+
+      <p><b>Model Organization Tips:</b></p>
+      <list listStyle="dash">
+        <item>Standard locations: ComfyUI/models/checkpoints/, loras/, controlnet/, vae/</item>
+        <item>Use descriptive filenames: sdxl_base_v1.0.safetensors not model.safetensors</item>
+        <item>Keep model versions documented (e.g., sd15_v1-5.ckpt vs sd15_v2-0.ckpt)</item>
+      </list>
+    </cp>
+
+    <cp caption="Issue: Slow generation speed">
+      <p><b>Diagnosis Steps:</b></p>
+      <list listStyle="number">
+        <item>Check GPU utilization: Run nvidia-smi (should be 95-100% during generation)</item>
+        <item>Verify CUDA enabled: ComfyUI console should show "Using device: cuda"</item>
+        <item>Review sampler settings: dpmpp_3m_sde with 50 steps is very slow</item>
+        <item>Check model loading: Are models reloading on every run? (5+ second delay)</item>
+        <item>Monitor CPU usage: 100% CPU may indicate bottleneck (unlikely but possible)</item>
+      </list>
+
+      <p><b>Optimizations (expected improvements):</b></p>
+      <list listStyle="dash">
+        <item><b>Sampler change:</b> euler_a or dpmpp_2m (30-50% faster than dpmpp_3m_sde)</item>
+        <item><b>Reduce steps:</b> 30 → 20 steps (33% faster, minimal quality loss)</item>
+        <item><b>Enable xformers:</b> Launch with appropriate flags (10-20% faster)</item>
+        <item><b>Keep models loaded:</b> Use --keep-models flag (saves 2-5s per run)</item>
+        <item><b>Lower resolution:</b> Generate at 768px then upscale (40-60% faster)</item>
+      </list>
+
+      <p><b>Speed Benchmarks (SDXL 1024px, 25 steps, RTX 3090):</b></p>
+      <list listStyle="dash">
+        <item>euler_a: 12-15 seconds</item>
+        <item>dpmpp_2m: 18-22 seconds</item>
+        <item>dpmpp_2m_karras: 20-25 seconds</item>
+        <item>dpmpp_3m_sde: 35-45 seconds</item>
+      </list>
+    </cp>
+
+    <cp caption="Issue: Poor output quality / Unexpected results">
+      <p><b>Common Causes and Fixes:</b></p>
+
+      <p><b>1. CFG Scale Issues:</b></p>
+      <list listStyle="dash">
+        <item><b>Too low (&lt;5):</b> Output ignores prompt, looks generic → Increase to 7-8</item>
+        <item><b>Too high (&gt;12):</b> Oversaturated, artifacts, burned look → Reduce to 7-9</item>
+        <item><b>Fix:</b> SD1.5 use 7-9, SDXL use 5-8</item>
+      </list>
+
+      <p><b>2. Insufficient Steps:</b></p>
+      <list listStyle="dash">
+        <item>Symptoms: Blurry, undefined, low detail</item>
+        <item>Minimum: 15 steps for speed, 20-25 for quality, 30+ for maximum detail</item>
+        <item>Test: If increasing steps improves quality significantly, original was too low</item>
+      </list>
+
+      <p><b>3. Wrong Resolution for Model:</b></p>
+      <list listStyle="dash">
+        <item>SD1.5 at 1024px: Composition breaks, repeated elements</item>
+        <item>SDXL at 512px: Blurry, low detail, poor quality</item>
+        <item>Fix: Use native resolution (512 for SD1.5, 1024 for SDXL)</item>
+      </list>
+
+      <p><b>4. Broken or Mismatched VAE:</b></p>
+      <list listStyle="dash">
+        <item>Symptoms: Very blurry, washed out colors, grey tint</item>
+        <item>Cause: Wrong VAE for model (SDXL VAE with SD1.5) or corrupted file</item>
+        <item>Fix: Load correct VAE with VAELoader node or use checkpoint's embedded VAE</item>
+        <item>Test: Try different VAE files to identify if VAE is the issue</item>
+      </list>
+
+      <p><b>5. Poor Prompt Engineering:</b></p>
+      <list listStyle="dash">
+        <item>Too vague: "a person" → "portrait of a young woman, detailed face, natural lighting"</item>
+        <item>Missing negative prompt: Add "low quality, blurry, bad anatomy, artifacts"</item>
+        <item>Wrong emphasis: Important details buried at end of long prompt</item>
+      </list>
+
+      <p><b>6. Sampler/Scheduler Mismatch:</b></p>
+      <list listStyle="dash">
+        <item>Avoid: euler + karras (known quality issues)</item>
+        <item>Best: dpmpp_2m + karras OR euler_a + normal</item>
+        <item>Test: Try 2-3 different sampler combinations to find best for your use case</item>
+      </list>
+    </cp>
+
+    <cp caption="Issue: Workflow won't load / JSON errors">
+      <p><b>Common JSON Errors:</b></p>
+      <list listStyle="dash">
+        <item>"Unexpected token" → Missing comma, bracket, or quote</item>
+        <item>"Duplicate key" → Two nodes with same ID (e.g., two "5" nodes)</item>
+        <item>"Invalid escape sequence" → Backslashes in Windows paths (use forward slash or double backslash)</item>
+      </list>
+
+      <p><b>Debugging Steps:</b></p>
+      <list listStyle="number">
+        <item>Validate JSON syntax: Use jsonlint.com or VS Code JSON validator</item>
+        <item>Check for common mistakes:
+          <list listStyle="dash">
+            <item>Missing commas between node definitions</item>
+            <item>Trailing comma after last node (invalid in strict JSON)</item>
+            <item>Unquoted node IDs (should be "1" not 1)</item>
+          </list>
+        </item>
+        <item>Verify all referenced node IDs exist (no broken connections)</item>
+        <item>Check custom node availability: Missing custom nodes cause load failures</item>
+        <item>Try loading in ComfyUI: Error console gives specific line numbers</item>
+      </list>
+
+      <p><b>Prevention:</b></p>
+      <list listStyle="dash">
+        <item>Export workflows from ComfyUI UI (guaranteed valid format)</item>
+        <item>Use JSON formatter/linter when editing manually</item>
+        <item>Keep backup copies of working workflows before modifications</item>
+      </list>
+    </cp>
+
+    <cp caption="Issue: Custom node not found / Import errors">
+      <p><b>Symptoms:</b></p>
+      <list listStyle="dash">
+        <item>"Node type not found: CustomNodeName"</item>
+        <item>"ModuleNotFoundError: No module named 'custom_nodes.X'"</item>
+        <item>Workflow loads but specific nodes show red/error state</item>
+      </list>
+
+      <p><b>Solutions:</b></p>
+      <list listStyle="number">
+        <item>Install missing custom node:
+          <list listStyle="dash">
+            <item>Use ComfyUI Manager (recommended): Search and install from UI</item>
+            <item>Manual: git clone into ComfyUI/custom_nodes/ directory</item>
+          </list>
+        </item>
+        <item>Install node dependencies: cd into node folder, run pip install -r requirements.txt</item>
+        <item>Restart ComfyUI after installing custom nodes</item>
+        <item>Check node compatibility: Some nodes require specific ComfyUI versions</item>
+        <item>Update nodes: cd custom_nodes/node_name && git pull</item>
+      </list>
+
+      <p><b>Prevention:</b></p>
+      <list listStyle="dash">
+        <item>Document all custom nodes used in workflow README</item>
+        <item>Include installation links and version requirements</item>
+        <item>Test workflows on fresh ComfyUI install to verify dependencies</item>
+      </list>
+    </cp>
+  </troubleshooting>
 </poml>

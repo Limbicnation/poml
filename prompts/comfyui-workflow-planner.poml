@@ -71,8 +71,8 @@
       <item><b>Node:</b> Functional unit representing an operation (e.g., KSampler, VAEDecode, CLIPTextEncode)</item>
       <item><b>Workflow:</b> JSON file defining node connections and parameters for image generation pipeline</item>
       <item><b>Latent Space:</b> Compressed representation used by diffusion models (typically 8x8x4 encoding of image)</item>
-      <item><b>Conditioning:</b> Text or image prompts encoded by CLIP/other encoders to guide model generation</item>
-      <item><b>CFG Scale:</b> Classifier-Free Guidance strength controlling prompt adherence (typical range: 1-20)</item>
+      <item><b>Conditioning:</b> Text or image prompts encoded by CLIP/T5/other encoders to guide model generation</item>
+      <item><b>CFG Scale:</b> Classifier-Free Guidance strength controlling prompt adherence (range varies by model)</item>
       <item><b>Sampler:</b> Denoising algorithm for generating images (euler, dpmpp_2m, dpmpp_sde, etc.)</item>
       <item><b>Scheduler:</b> Step distribution strategy for sampler (normal, karras, exponential, sgm_uniform)</item>
       <item><b>VAE:</b> Variational AutoEncoder for encoding images to latent space and decoding back</item>
@@ -82,15 +82,43 @@
       <item><b>IP-Adapter:</b> Image Prompt Adapter for style/content transfer from reference images</item>
     </list>
 
+    <p><b>Model Families and Architectures:</b></p>
+    <list listStyle="dash">
+      <item><b>SD 1.5/2.1 (Legacy):</b> Original Stable Diffusion, CLIP text encoder, widely supported</item>
+      <item><b>SDXL (Standard):</b> Stable Diffusion XL, dual CLIP encoders, 1024px native, current standard</item>
+      <item><b>SD3 (Next-Gen):</b> Stable Diffusion 3, MMDiT architecture, triple text encoders (CLIP-L, CLIP-G, T5), improved prompt understanding</item>
+      <item><b>Flux (Next-Gen):</b> Black Forest Labs models, guidance distillation, T5 text encoder, superior quality
+        <list listStyle="plus">
+          <item>Schnell: Fast variant, 4-step generation, distilled guidance</item>
+          <item>Dev: Development variant, 20-30 steps, highest quality</item>
+          <item>Pro: API-only commercial variant</item>
+        </list>
+      </item>
+      <item><b>Qwen-VL:</b> Vision-language model with advanced text understanding and multimodal capabilities</item>
+      <item><b>Wan Video:</b> Video generation models with temporal consistency and frame interpolation</item>
+    </list>
+
+    <p><b>Advanced Concepts (New Models):</b></p>
+    <list listStyle="dash">
+      <item><b>MMDiT:</b> Multimodal Diffusion Transformer used in SD3 for improved architecture</item>
+      <item><b>T5 Encoder:</b> Text-To-Text Transfer Transformer, powerful text encoder used in Flux and SD3</item>
+      <item><b>Guidance Distillation:</b> Technique in Flux Schnell allowing CFG-quality output without CFG (enables 4-step generation)</item>
+      <item><b>Timestep Sampling:</b> Advanced scheduling used in Flux models for optimal denoising trajectory</item>
+      <item><b>Temporal Consistency:</b> Video generation property ensuring coherent motion between frames</item>
+      <item><b>Frame Interpolation:</b> Generating intermediate frames between keyframes for smooth video</item>
+    </list>
+
     <p><b>Data Types:</b></p>
     <list listStyle="dash">
-      <item><b>MODEL:</b> Base diffusion model for generation</item>
-      <item><b>CLIP:</b> Text encoder for processing prompts</item>
-      <item><b>VAE:</b> Encoder/decoder for latent-pixel conversion</item>
+      <item><b>MODEL:</b> Base diffusion model for generation (architecture varies by family)</item>
+      <item><b>CLIP:</b> Text encoder for processing prompts (SD1.5, SDXL)</item>
+      <item><b>T5:</b> Advanced text encoder (Flux, SD3) for superior prompt understanding</item>
+      <item><b>VAE:</b> Encoder/decoder for latent-pixel conversion (model-specific)</item>
       <item><b>CONDITIONING:</b> Encoded prompts (positive/negative)</item>
       <item><b>LATENT:</b> Compressed image representation in latent space</item>
       <item><b>IMAGE:</b> Pixel-space image data (after VAE decode)</item>
       <item><b>MASK:</b> Binary or alpha channel for selective processing</item>
+      <item><b>VIDEO:</b> Sequence of frames with temporal information</item>
     </list>
   </glossary>
 
@@ -123,22 +151,227 @@
       <item>What is the target generation time per image? (seconds, minutes)</item>
     </list>
 
-    <p><b>Model Compatibility Reference:</b></p>
+    <p><b>Model Compatibility Reference (Updated 2025):</b></p>
+
+    <cp caption="Generation 1: Legacy Models (2022-2023)">
+      <p><b>SD 1.5:</b></p>
+      <list listStyle="dash">
+        <item>Resolution: 512x512 native (optimal), 512x768/768x512 acceptable</item>
+        <item>VRAM: 4-6GB (base), 5-7GB (with ControlNet)</item>
+        <item>Speed: Fast (10-15s @ 25 steps, RTX 3060)</item>
+        <item>Quality: Good, extensive LoRA/embedding ecosystem</item>
+        <item>Text Encoder: Single CLIP-L</item>
+        <item>Best For: Legacy workflows, LoRA-heavy projects, low VRAM systems</item>
+        <item>Status: Legacy but still widely used</item>
+      </list>
+
+      <p><b>SD 2.1:</b></p>
+      <list listStyle="dash">
+        <item>Resolution: 768x768 native</item>
+        <item>VRAM: 6-8GB</item>
+        <item>Speed: Medium (15-20s @ 25 steps)</item>
+        <item>Text Encoder: OpenCLIP-H (different from SD1.5)</item>
+        <item>Best For: Niche use cases, specific trained models</item>
+        <item>Status: Limited adoption, use SD1.5 or SDXL instead</item>
+      </list>
+    </cp>
+
+    <cp caption="Generation 2: Current Standard (2023-2024)">
+      <p><b>SDXL 1.0:</b></p>
+      <list listStyle="dash">
+        <item>Resolution: 1024x1024 native (optimal), up to 1536x1536 with tiling</item>
+        <item>VRAM: 8-12GB (base), 10-14GB (with ControlNet), 12-16GB (with Refiner)</item>
+        <item>Speed: Slow (20-30s @ 25 steps, RTX 3090)</item>
+        <item>Quality: Excellent, current production standard</item>
+        <item>Text Encoders: Dual CLIP (CLIP-L + OpenCLIP-G)</item>
+        <item>Best For: Production workflows, high-quality outputs, standard use cases</item>
+        <item>LoRA Support: Extensive and growing</item>
+        <item>ControlNet: Full support (canny, depth, openpose, etc.)</item>
+        <item>Status: Current industry standard (2024)</item>
+      </list>
+
+      <p><b>LCM/Turbo (SDXL variants):</b></p>
+      <list listStyle="dash">
+        <item>Resolution: 1024x1024 (same as SDXL)</item>
+        <item>VRAM: 8-10GB</item>
+        <item>Speed: Very fast (4-8 steps, 5-10s)</item>
+        <item>Quality: Good but limited ceiling, optimized for speed</item>
+        <item>Best For: Rapid iteration, previews, real-time applications</item>
+        <item>Status: Specialized for speed-critical workflows</item>
+      </list>
+    </cp>
+
+    <cp caption="Generation 3: Next-Gen Models (2024-2025)">
+      <p><b>Stable Diffusion 3 Medium (SD3-Medium):</b></p>
+      <list listStyle="dash">
+        <item>Resolution: 1024x1024 native, excellent multi-aspect ratio support</item>
+        <item>VRAM: 10-14GB (can offload T5 for 8-10GB)</item>
+        <item>Speed: Medium (18-25s @ 28 steps)</item>
+        <item>Quality: Excellent, superior prompt understanding vs SDXL</item>
+        <item>Architecture: MMDiT (Multimodal Diffusion Transformer)</item>
+        <item>Text Encoders: Triple (CLIP-L, CLIP-G, T5-XXL)</item>
+        <item>Best For: Complex prompts, text rendering, multi-subject scenes</item>
+        <item>LoRA Support: Growing but limited vs SDXL</item>
+        <item>ControlNet: Limited support (emerging)</item>
+        <item>Status: Production-ready, adoption increasing</item>
+      </list>
+
+      <p><b>Stable Diffusion 3 Large (SD3-Large):</b></p>
+      <list listStyle="dash">
+        <item>Resolution: 1024x1024+, supports higher resolutions efficiently</item>
+        <item>VRAM: 16-24GB (professional GPUs required)</item>
+        <item>Speed: Slow (30-45s @ 28 steps)</item>
+        <item>Quality: Best in class for photorealism and detail</item>
+        <item>Best For: Professional work, maximum quality requirements</item>
+        <item>Status: Professional/commercial workflows</item>
+      </list>
+
+      <p><b>Flux.1 Schnell (Fast):</b></p>
+      <list listStyle="dash">
+        <item>Resolution: 1024x1024 native, excellent multi-resolution support</item>
+        <item>VRAM: 12-16GB</item>
+        <item>Speed: Very Fast (4 steps optimal, 3-6s on RTX 4090)</item>
+        <item>Quality: Excellent despite 4 steps (guidance distillation)</item>
+        <item>Architecture: Flow matching with rectified flows</item>
+        <item>Text Encoder: T5-XXL (superior prompt understanding)</item>
+        <item>CFG: Not used (distilled into model)</item>
+        <item>Guidance Scale: 3.5 (specific to Flux, not CFG)</item>
+        <item>Best For: Speed-critical workflows, real-time applications, rapid iteration</item>
+        <item>LoRA Support: Limited but growing (Flux LoRAs required)</item>
+        <item>Status: Recommended for speed + quality balance</item>
+      </list>
+
+      <p><b>Flux.1 Dev (Quality):</b></p>
+      <list listStyle="dash">
+        <item>Resolution: 1024x1024 native, supports up to 2048x2048</item>
+        <item>VRAM: 14-20GB</item>
+        <item>Speed: Medium (20-30 steps optimal, 15-25s on RTX 4090)</item>
+        <item>Quality: Best available (surpasses SDXL and SD3 in many cases)</item>
+        <item>Text Encoder: T5-XXL</item>
+        <item>Guidance Scale: 3.0-4.5 (different range from SD models)</item>
+        <item>Best For: Maximum quality, professional outputs, hero images</item>
+        <item>LoRA Support: Growing ecosystem</item>
+        <item>Status: Highest quality open model available (2025)</item>
+      </list>
+
+      <p><b>Flux.1 Pro:</b></p>
+      <list listStyle="dash">
+        <item>Status: API-only, commercial use via Black Forest Labs API</item>
+        <item>Quality: Maximum (proprietary enhancements)</item>
+        <item>Best For: Commercial applications requiring best-in-class output</item>
+      </list>
+    </cp>
+
+    <cp caption="Specialized Models">
+      <p><b>Qwen-VL (Vision-Language):</b></p>
+      <list listStyle="dash">
+        <item>Resolution: Variable (512-2048px depending on configuration)</item>
+        <item>VRAM: 8-16GB (depends on model size and quantization)</item>
+        <item>Speed: Medium (15-30s depending on prompt complexity)</item>
+        <item>Quality: Excellent for complex prompts requiring understanding</item>
+        <item>Best For: Complex multi-object scenes, detailed descriptions, multimodal inputs</item>
+        <item>Unique Features: Can accept image+text inputs, superior compositional understanding</item>
+        <item>Status: Specialized use cases, growing adoption</item>
+      </list>
+
+      <p><b>Wan Video (Text/Image-to-Video):</b></p>
+      <list listStyle="dash">
+        <item>Resolution: 512x512 to 1024x1024 video (16:9, 1:1, 9:16 aspect ratios)</item>
+        <item>VRAM: 16-24GB minimum, 32GB+ recommended for longer clips</item>
+        <item>Speed: Very slow (2-5 minutes for 2-4 second clips)</item>
+        <item>Frame Count: Typically 16-48 frames</item>
+        <item>Quality: Good temporal consistency, emerging technology</item>
+        <item>Best For: Short video clips, animations, motion concepts</item>
+        <item>Unique Features: Temporal consistency, frame interpolation, motion control</item>
+        <item>Status: Experimental/early adoption, rapidly improving</item>
+      </list>
+
+      <p><b>Cascade:</b></p>
+      <list listStyle="dash">
+        <item>Resolution: Multi-stage (64→256→1024+)</item>
+        <item>VRAM: 16GB+ (multiple models loaded)</item>
+        <item>Speed: Very slow (1-2 minutes per image)</item>
+        <item>Status: Superseded by Flux/SD3, use newer models instead</item>
+      </list>
+    </cp>
+
+    <p><b>Model Selection Quick Reference:</b></p>
     <list listStyle="dash">
-      <item><b>SD 1.5:</b> Base resolution 512x512, VRAM 4-6GB, fast generation, extensive LoRA support</item>
-      <item><b>SDXL 1.0:</b> Base resolution 1024x1024, VRAM 8-12GB, higher quality, slower generation</item>
-      <item><b>SD 2.1:</b> Base resolution 768x768, VRAM 6-8GB, different CLIP encoder</item>
-      <item><b>Cascade:</b> Multi-stage workflow, VRAM 16GB+, highest quality, very slow</item>
-      <item><b>LCM/Turbo:</b> Few-step models (4-8 steps), fast generation, lower quality ceiling</item>
+      <item><b>Maximum Speed:</b> Flux Schnell (4 steps, 3-6s) &gt; LCM-SDXL (4-8 steps, 5-10s)</item>
+      <item><b>Maximum Quality:</b> Flux Dev &gt; SD3 Large &gt; SD3 Medium ≥ SDXL</item>
+      <item><b>Best Prompt Following:</b> Flux Dev/Schnell &gt; SD3 &gt; SDXL &gt; SD1.5</item>
+      <item><b>Most LoRAs Available:</b> SD1.5 &gt; SDXL &gt; Flux &gt; SD3</item>
+      <item><b>Lowest VRAM:</b> SD1.5 (4GB) &lt; SDXL (8GB) &lt; Flux Schnell (12GB)</item>
+      <item><b>Production Standard (2024):</b> SDXL</item>
+      <item><b>Production Standard (2025):</b> Flux Dev or SD3 Medium</item>
+      <item><b>Real-time/Interactive:</b> Flux Schnell or LCM-SDXL</item>
+      <item><b>Video Generation:</b> Wan Video (only option currently)</item>
     </list>
 
     <p><b>Critical Compatibility Checks:</b></p>
     <list listStyle="dash">
-      <item>VAE compatibility: SDXL requires sdxl_vae.safetensors, SD1.5 uses vae-ft-mse-840000</item>
-      <item>CLIP compatibility: SDXL uses dual CLIP encoders, SD1.5 uses single encoder</item>
-      <item>ControlNet versions: Must match base model (controlnet-sd15 vs controlnet-sdxl)</item>
-      <item>LoRA architecture: SDXL LoRAs incompatible with SD1.5 and vice versa</item>
-      <item>Resolution constraints: Generating at non-native resolutions reduces quality</item>
+      <item><b>VAE Compatibility:</b>
+        <list listStyle="plus">
+          <item>SD1.5: vae-ft-mse-840000 or blessed2.vae</item>
+          <item>SDXL: sdxl_vae.safetensors (required)</item>
+          <item>SD3: SD3 VAE (model-specific, included in checkpoint)</item>
+          <item>Flux: Flux VAE (model-specific, included in checkpoint)</item>
+          <item>Cross-model VAEs NOT compatible</item>
+        </list>
+      </item>
+      <item><b>Text Encoder Compatibility:</b>
+        <list listStyle="plus">
+          <item>SD1.5: CLIP-L only</item>
+          <item>SDXL: Dual CLIP (CLIP-L + OpenCLIP-G)</item>
+          <item>SD3: Triple encoders (CLIP-L + CLIP-G + T5-XXL)</item>
+          <item>Flux: T5-XXL (T5 can be 8-bit quantized to save VRAM)</item>
+          <item>Cannot mix text encoders between model families</item>
+        </list>
+      </item>
+      <item><b>ControlNet Versions:</b>
+        <list listStyle="plus">
+          <item>SD1.5: Extensive support (controlnet-sd15-*)</item>
+          <item>SDXL: Full support (controlnet-sdxl-*)</item>
+          <item>SD3: Limited/experimental support</item>
+          <item>Flux: Emerging support, requires Flux-specific ControlNets</item>
+          <item>Must match base model architecture</item>
+        </list>
+      </item>
+      <item><b>LoRA Compatibility:</b>
+        <list listStyle="plus">
+          <item>SD1.5 LoRAs: Only work with SD1.5</item>
+          <item>SDXL LoRAs: Only work with SDXL</item>
+          <item>SD3 LoRAs: Only work with SD3 (new format)</item>
+          <item>Flux LoRAs: Only work with Flux (new architecture)</item>
+          <item>No cross-compatibility between model families</item>
+        </list>
+      </item>
+      <item><b>Resolution Constraints:</b>
+        <list listStyle="plus">
+          <item>SD1.5: 512x512 ±25% optimal</item>
+          <item>SDXL: 1024x1024 ±25% optimal</item>
+          <item>SD3: Flexible multi-aspect ratio (1024 base)</item>
+          <item>Flux: Excellent multi-resolution (512-2048px)</item>
+          <item>Non-native resolutions = quality degradation (except SD3/Flux)</item>
+        </list>
+      </item>
+      <item><b>Custom Node Requirements:</b>
+        <list listStyle="plus">
+          <item>SD1.5/SDXL: Built-in ComfyUI support</item>
+          <item>SD3: Requires SD3 custom nodes (ComfyUI-Manager)</item>
+          <item>Flux: Requires Flux custom nodes (ComfyUI-Manager)</item>
+          <item>Wan Video: Requires video generation nodes (experimental)</item>
+        </list>
+      </item>
+    </list>
+
+    <p><b>Migration Guide:</b></p>
+    <list listStyle="dash">
+      <item><b>From SD1.5 → SDXL:</b> 2x resolution, 2x VRAM, similar workflow structure</item>
+      <item><b>From SDXL → SD3:</b> Add T5 encoder, adjust CFG lower, expect better prompt understanding</item>
+      <item><b>From SDXL → Flux Schnell:</b> 4 steps only, use guidance 3.5, 1.5x VRAM, much faster</item>
+      <item><b>From SDXL → Flux Dev:</b> Higher VRAM, guidance 3.0-4.5 (not CFG 7-9), best quality</item>
+      <item><b>For Video:</b> Start with image model, then extend to Wan Video for motion</item>
     </list>
 
     <p><b>Deliverables:</b></p>
@@ -324,6 +557,279 @@
       </list>
       <p><b>Example:</b> SDXL Base (steps 0-20) → SDXL Refiner (steps 20-25) for maximum quality</p>
       <p><b>VRAM:</b> 14-18GB (both models loaded), use ModelUnload to reduce</p>
+    </cp>
+
+    <cp caption="Flux.1 Schnell Workflow (Ultra-Fast Next-Gen)">
+      <p><b>Overview:</b> 4-step generation using guidance distillation, 3-6 seconds per image</p>
+
+      <p><b>Minimum Required Nodes (7-8 nodes):</b></p>
+      <list listStyle="decimal">
+        <item><b>CheckpointLoaderSimple or UNETLoader:</b> Load flux1-schnell.safetensors
+          <list listStyle="dash">
+            <item>Model size: ~24GB (BF16) or ~12GB (FP8 quantized)</item>
+            <item>Location: ComfyUI/models/checkpoints/ or unet/</item>
+          </list>
+        </item>
+        <item><b>DualCLIPLoader or TripleCLIPLoader:</b> Load T5-XXL text encoder
+          <list listStyle="dash">
+            <item>T5 can be 8-bit quantized to save VRAM (t5xxl_fp8_e4m3fn.safetensors)</item>
+            <item>Option: Use CLIPLoader for CLIP-L if not using T5</item>
+          </list>
+        </item>
+        <item><b>VAELoader:</b> Load Flux VAE (ae.safetensors)
+          <list listStyle="dash">
+            <item>Flux-specific VAE, not compatible with SD models</item>
+          </list>
+        </item>
+        <item><b>CLIPTextEncode:</b> Encode positive prompt with T5
+          <list listStyle="dash">
+            <item>Flux has superior prompt understanding vs SDXL</item>
+            <item>Natural language works well, no need for keyword stuffing</item>
+          </list>
+        </item>
+        <item><b>FluxGuidance (CRITICAL):</b> Apply guidance scale
+          <list listStyle="dash">
+            <item>guidance: 3.5 (recommended for Schnell)</item>
+            <item>Range: 2.0-5.0 (different from SD's CFG 7-9)</item>
+            <item>This node is REQUIRED for Flux, workflow will fail without it</item>
+          </list>
+        </item>
+        <item><b>EmptyLatentImage:</b> Initialize latent at target resolution
+          <list listStyle="dash">
+            <item>Flux supports flexible resolutions (512-2048px)</item>
+            <item>Common: 1024x1024, 1024x1536, 1536x1024</item>
+          </list>
+        </item>
+        <item><b>KSampler or KSamplerAdvanced:</b> Generate image
+          <list listStyle="dash">
+            <item>steps: 4 (FIXED - Schnell optimized for exactly 4 steps)</item>
+            <item>sampler: euler (recommended)</item>
+            <item>scheduler: simple or normal</item>
+            <item>cfg: 1.0 (Flux doesn't use traditional CFG)</item>
+            <item>denoise: 1.0</item>
+          </list>
+        </item>
+        <item><b>VAEDecode:</b> Decode latent to image with Flux VAE</item>
+        <item><b>SaveImage:</b> Output final result</item>
+      </list>
+
+      <p><b>Key Differences from SDXL:</b></p>
+      <list listStyle="dash">
+        <item><b>Steps:</b> 4 steps only (vs SDXL 25-30 steps)</item>
+        <item><b>Guidance:</b> FluxGuidance node with 3.5 value (not CFG scale)</item>
+        <item><b>Speed:</b> 3-6 seconds (vs SDXL 20-30 seconds)</item>
+        <item><b>Text Encoder:</b> T5-XXL instead of dual CLIP</item>
+        <item><b>Negative Prompt:</b> Not used/needed (guidance distillation handles it)</item>
+        <item><b>Sampler:</b> euler works best, dpmpp samplers not needed</item>
+      </list>
+
+      <p><b>VRAM Management:</b></p>
+      <list listStyle="dash">
+        <item><b>Full precision (BF16):</b> 24GB+ VRAM required</item>
+        <item><b>FP8 quantized model:</b> 12-14GB VRAM (recommended for consumer GPUs)</item>
+        <item><b>FP8 model + 8-bit T5:</b> 10-12GB VRAM (most accessible)</item>
+        <item><b>Launch flag:</b> --lowvram for 12GB GPUs, --normalvram for 16GB+</item>
+      </list>
+
+      <p><b>Performance Metrics:</b></p>
+      <list listStyle="dash">
+        <item>RTX 4090: 3-4 seconds @ 1024x1024</item>
+        <item>RTX 4080: 4-5 seconds @ 1024x1024</item>
+        <item>RTX 3090: 5-6 seconds @ 1024x1024</item>
+        <item>VRAM: 12-16GB peak (with FP8 quantization)</item>
+      </list>
+
+      <p><b>Best For:</b> Speed-critical workflows, real-time applications, rapid iteration, when you need SDXL+ quality at LCM-like speeds</p>
+
+      <p><b>Limitations:</b></p>
+      <list listStyle="dash">
+        <item>Limited LoRA support (growing)</item>
+        <item>No ControlNet support yet (experimental)</item>
+        <item>Requires Flux custom nodes from ComfyUI-Manager</item>
+        <item>Must use exactly 4 steps (other step counts degrade quality)</item>
+      </list>
+    </cp>
+
+    <cp caption="Flux.1 Dev Workflow (Maximum Quality Next-Gen)">
+      <p><b>Overview:</b> 20-30 step generation for best-in-class quality, 15-25 seconds per image</p>
+
+      <p><b>Node Structure (similar to Schnell with variations):</b></p>
+      <list listStyle="decimal">
+        <item>CheckpointLoaderSimple: flux1-dev.safetensors (FP8 quantized recommended)</item>
+        <item>DualCLIPLoader: T5-XXL text encoder (8-bit quantization recommended)</item>
+        <item>VAELoader: Flux VAE (ae.safetensors)</item>
+        <item>CLIPTextEncode: Positive prompt encoding</item>
+        <item><b>FluxGuidance:</b> guidance 3.0-4.5
+          <list listStyle="dash">
+            <item>3.0: Balanced (recommended starting point)</item>
+            <item>3.5-4.0: Stronger prompt adherence</item>
+            <item>4.5: Maximum adherence (may reduce creativity)</item>
+          </list>
+        </item>
+        <item>EmptyLatentImage: 1024x1024 or higher (supports 2048x2048)</item>
+        <item><b>KSampler:</b> Generation with Dev-optimized settings
+          <list listStyle="dash">
+            <item>steps: 20-30 (20 for speed, 25-30 for maximum quality)</item>
+            <item>sampler: euler (primary) or euler_a (alternative)</item>
+            <item>scheduler: simple or beta</item>
+            <item>cfg: 1.0 (not used in traditional sense)</item>
+            <item>denoise: 1.0</item>
+          </list>
+        </item>
+        <item>VAEDecode + SaveImage: Output pipeline</item>
+      </list>
+
+      <p><b>Quality Optimization:</b></p>
+      <list listStyle="dash">
+        <item><b>Step Count Testing:</b>
+          <list listStyle="plus">
+            <item>20 steps: Very good quality, 15-18s generation</item>
+            <item>25 steps: Excellent quality, 18-22s generation</item>
+            <item>30 steps: Maximum quality, 22-28s generation</item>
+            <item>Beyond 30: Diminishing returns</item>
+          </list>
+        </item>
+        <item><b>Guidance Tuning:</b>
+          <list listStyle="plus">
+            <item>Lower (2.5-3.0): More creative, artistic interpretation</item>
+            <item>Medium (3.0-3.5): Balanced prompt following</item>
+            <item>Higher (4.0-4.5): Strict prompt adherence</item>
+          </list>
+        </item>
+        <item><b>Resolution Sweet Spots:</b>
+          <list listStyle="plus">
+            <item>1024x1024: Standard, fastest</item>
+            <item>1024x1536: Portrait, excellent quality</item>
+            <item>1536x1024: Landscape, excellent quality</item>
+            <item>2048x2048: Maximum detail (requires 20GB+ VRAM)</item>
+          </list>
+        </item>
+      </list>
+
+      <p><b>Comparison to Other Models:</b></p>
+      <list listStyle="dash">
+        <item>vs SDXL: Better prompt understanding, superior detail, 1.5x VRAM</item>
+        <item>vs SD3: Generally better quality, simpler workflow, more VRAM</item>
+        <item>vs Flux Schnell: 5x slower, noticeably better quality and detail</item>
+      </list>
+
+      <p><b>VRAM: </b>14-20GB (FP8), 16-24GB recommended for 2048px</p>
+      <p><b>Best For:</b> Professional outputs, hero images, maximum quality requirements, complex prompts</p>
+    </cp>
+
+    <cp caption="SD3 Medium Workflow (Balanced Next-Gen)">
+      <p><b>Overview:</b> Triple text encoder architecture with MMDiT for improved prompt understanding</p>
+
+      <p><b>Required Nodes (8-10 nodes):</b></p>
+      <list listStyle="decimal">
+        <item><b>SD3CheckpointLoader or TripleCLIPLoader:</b> Load SD3 model
+          <list listStyle="dash">
+            <item>Loads MODEL, CLIP-L, CLIP-G, T5, and VAE together</item>
+            <item>Model size: ~6GB (SD3 Medium)</item>
+          </list>
+        </item>
+        <item><b>CLIPTextEncodeSD3 (x2):</b> Encode positive and negative prompts
+          <list listStyle="dash">
+            <item>Uses all three text encoders (CLIP-L, CLIP-G, T5)</item>
+            <item>Can optionally disable T5 to save VRAM (quality reduction)</item>
+            <item>clip_l, clip_g, t5xxl inputs all from TripleCLIPLoader</item>
+          </list>
+        </item>
+        <item><b>EmptySD3LatentImage:</b> Initialize latent canvas
+          <list listStyle="dash">
+            <item>Supports flexible aspect ratios better than SDXL</item>
+            <item>Common: 1024x1024, 832x1216, 1216x832</item>
+          </list>
+        </item>
+        <item><b>KSampler (with SD3 support):</b> Generate using MMDiT
+          <list listStyle="dash">
+            <item>steps: 28 (recommended for SD3, vs SDXL 25)</item>
+            <item>cfg: 4.5-7.0 (lower than SDXL's 7-9)</item>
+            <item>sampler: dpmpp_2m or euler (SD3-optimized)</item>
+            <item>scheduler: sgm_uniform or normal</item>
+          </list>
+        </item>
+        <item><b>VAEDecode:</b> Use SD3 VAE (included in checkpoint)</item>
+        <item><b>SaveImage:</b> Output final result</item>
+      </list>
+
+      <p><b>Key SD3 Features:</b></p>
+      <list listStyle="dash">
+        <item><b>Superior Text Rendering:</b> Much better at generating readable text vs SDXL</item>
+        <item><b>Multi-Subject Handling:</b> Excellent at complex scenes with multiple objects</item>
+        <item><b>Prompt Understanding:</b> Follows complex, detailed prompts better than SDXL</item>
+        <item><b>Aspect Ratios:</b> More flexible than SDXL, handles non-square better</item>
+      </list>
+
+      <p><b>VRAM Optimization for SD3:</b></p>
+      <list listStyle="dash">
+        <item><b>Full (all encoders):</b> 12-14GB</item>
+        <item><b>Without T5:</b> 8-10GB (disable T5 in CLIPTextEncodeSD3 node)</item>
+        <item><b>Quantized model:</b> 10-12GB (fp8 quantization)</item>
+        <item><b>Recommendation:</b> Use T5 for best quality, disable only if VRAM-limited</item>
+      </list>
+
+      <p><b>CFG Scale Tuning for SD3:</b></p>
+      <list listStyle="dash">
+        <item>4.5-5.5: Balanced (recommended starting point)</item>
+        <item>6.0-7.0: Stronger adherence to prompt</item>
+        <item>Above 7.0: May cause over-saturation (unlike SDXL where 7-9 is normal)</item>
+        <item>SD3 is more sensitive to CFG than SDXL</item>
+      </list>
+
+      <p><b>Performance:</b> 18-25s @ 28 steps (RTX 4090), VRAM 10-14GB</p>
+      <p><b>Best For:</b> Text rendering, complex multi-subject scenes, detailed prompts, balanced quality/VRAM</p>
+
+      <p><b>Limitations:</b></p>
+      <list listStyle="dash">
+        <item>Limited LoRA ecosystem (growing but behind SDXL)</item>
+        <item>Limited ControlNet support (experimental)</item>
+        <item>Requires SD3 custom nodes from ComfyUI-Manager</item>
+      </list>
+    </cp>
+
+    <cp caption="Model Selection Pattern (Multi-Model Workflow)">
+      <p><b>Creating Flexible Workflows Supporting Multiple Models:</b></p>
+
+      <p><b>Strategy 1: Conditional Checkpoint Loading</b></p>
+      <list listStyle="dash">
+        <item>Use PrimitiveNode with STRING type for model selection</item>
+        <item>Connect to CheckpointLoaderSimple ckpt_name input</item>
+        <item>User can select: "sdxl_base.safetensors", "flux1-schnell-fp8.safetensors", "sd3_medium.safetensors"</item>
+        <item>Rest of workflow adapts based on model architecture</item>
+      </list>
+
+      <p><b>Strategy 2: Parallel Loaders with Switches</b></p>
+      <list listStyle="dash">
+        <item>Load SDXL, Flux, and SD3 models in parallel</item>
+        <item>Use custom "Switch" nodes to select active model</item>
+        <item>All models stay loaded (high VRAM) but instant switching</item>
+        <item>Best for: Comparing outputs across models</item>
+      </list>
+
+      <p><b>Strategy 3: Separate Workflows per Model Family</b></p>
+      <list listStyle="dash">
+        <item>Recommended approach for production</item>
+        <item>One workflow for SDXL, one for Flux, one for SD3</item>
+        <item>Optimized nodes and settings per model</item>
+        <item>Lower VRAM, better maintainability</item>
+      </list>
+
+      <p><b>Shared Components Across Models:</b></p>
+      <list listStyle="dash">
+        <item>Prompt text can be shared (though encoding differs)</item>
+        <item>Resolution settings often compatible (1024x1024 works for all)</item>
+        <item>Post-processing (upscaling, color correction) is universal</item>
+        <item>SaveImage paths and naming can be consistent</item>
+      </list>
+
+      <p><b>Model-Specific Adjustments Required:</b></p>
+      <list listStyle="dash">
+        <item><b>SDXL:</b> CFG 7-9, dual CLIP, 25-30 steps</item>
+        <item><b>Flux Schnell:</b> Guidance 3.5, T5 encoder, 4 steps, FluxGuidance node</item>
+        <item><b>Flux Dev:</b> Guidance 3.0-4.5, T5 encoder, 20-30 steps, FluxGuidance node</item>
+        <item><b>SD3:</b> CFG 4.5-7.0, triple encoders, 28 steps, SD3-specific nodes</item>
+      </list>
     </cp>
 
     <p><b>Deliverables:</b></p>
@@ -1254,6 +1760,327 @@
         <item>Document all custom nodes used in workflow README</item>
         <item>Include installation links and version requirements</item>
         <item>Test workflows on fresh ComfyUI install to verify dependencies</item>
+      </list>
+    </cp>
+
+    <cp caption="Flux-Specific Issues">
+      <p><b>Error: FluxGuidance node not found / missing</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> Workflow fails to load, "Node type FluxGuidance not found"</item>
+        <item><b>Cause:</b> Flux custom nodes not installed</item>
+        <item><b>Solution:</b>
+          <list listStyle="number">
+            <item>Open ComfyUI Manager (gear icon in menu)</item>
+            <item>Search for "Flux" or "ComfyUI-Flux"</item>
+            <item>Install flux custom nodes pack</item>
+            <item>Restart ComfyUI</item>
+          </list>
+        </item>
+        <item><b>Critical:</b> FluxGuidance node is REQUIRED for all Flux workflows, workflow will not run without it</item>
+      </list>
+
+      <p><b>Issue: Black output / completely dark images</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> Generation completes but output is all black or very dark</item>
+        <item><b>Common Causes:</b>
+          <list listStyle="number">
+            <item>Wrong VAE: Using SDXL VAE instead of Flux VAE</item>
+            <item>Wrong guidance value: Guidance too low (&lt;1.0) or missing FluxGuidance node</item>
+            <item>Incorrect step count for Flux Schnell (must be exactly 4)</item>
+          </list>
+        </item>
+        <item><b>Solutions:</b>
+          <list listStyle="number">
+            <item>Verify VAE: Use ae.safetensors (Flux VAE), NOT sdxl_vae.safetensors</item>
+            <item>Check FluxGuidance node: guidance should be 3.5 for Schnell, 3.0-4.5 for Dev</item>
+            <item>For Schnell: Use exactly 4 steps (not 3, not 5, exactly 4)</item>
+            <item>Verify T5 encoder loaded correctly (check console for loading errors)</item>
+          </list>
+        </item>
+      </list>
+
+      <p><b>Issue: Poor quality despite correct settings</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> Output quality worse than expected, blurry or low detail</item>
+        <item><b>Common Causes:</b>
+          <list listStyle="dash">
+            <item>Using wrong Flux variant (Schnell when expecting Dev quality)</item>
+            <item>T5 encoder not loading / using CLIP instead of T5</item>
+            <item>Incorrect step count (non-optimal for the variant)</item>
+            <item>Wrong sampler (not euler)</item>
+          </list>
+        </item>
+        <item><b>Solutions:</b>
+          <list listStyle="number">
+            <item>Verify model: flux1-schnell.safetensors (4 steps) vs flux1-dev.safetensors (20-30 steps)</item>
+            <item>Check text encoder: DualCLIPLoader should load T5-XXL, not just CLIP</item>
+            <item>Use euler sampler (primary) or euler_a (alternative)</item>
+            <item>Schnell: Must use exactly 4 steps</item>
+            <item>Dev: Use 20-30 steps (20 minimum for good quality)</item>
+          </list>
+        </item>
+      </list>
+
+      <p><b>Issue: OOM errors with Flux (12-16GB GPUs)</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> CUDA out of memory despite having 12-16GB VRAM</item>
+        <item><b>Cause:</b> Using full-precision (BF16) model on insufficient VRAM</item>
+        <item><b>Solutions:</b>
+          <list listStyle="number">
+            <item>Download FP8 quantized Flux model (12GB vs 24GB)</item>
+            <item>Use 8-bit quantized T5 encoder (t5xxl_fp8_e4m3fn.safetensors)</item>
+            <item>Launch ComfyUI with --lowvram flag</item>
+            <item>Reduce resolution: 1024→768 or 1024→896</item>
+            <item>Close all other GPU applications</item>
+          </list>
+        </item>
+        <item><b>Expected VRAM:</b> FP8 model + 8-bit T5 = 10-12GB (works on 12GB GPUs)</item>
+      </list>
+
+      <p><b>Warning: Flux Schnell with wrong step count</b></p>
+      <list listStyle="dash">
+        <item><b>Issue:</b> Using 20-30 steps with Flux Schnell</item>
+        <item><b>Result:</b> Severely degraded quality, artifacts, wasted time</item>
+        <item><b>Fix:</b> Flux Schnell is optimized for EXACTLY 4 steps - using more/fewer degrades quality</item>
+        <item><b>If you need more steps:</b> Use Flux Dev instead (20-30 steps)</item>
+      </list>
+    </cp>
+
+    <cp caption="SD3-Specific Issues">
+      <p><b>Error: TripleCLIPLoader or SD3 nodes not found</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> "Node type SD3CheckpointLoader not found" or similar</item>
+        <item><b>Cause:</b> SD3 custom nodes not installed</item>
+        <item><b>Solution:</b>
+          <list listStyle="number">
+            <item>Open ComfyUI Manager</item>
+            <item>Search for "SD3" or "Stable Diffusion 3"</item>
+            <item>Install SD3 custom nodes pack</item>
+            <item>Restart ComfyUI</item>
+            <item>Verify SD3 nodes appear in "Add Node" menu</item>
+          </list>
+        </item>
+      </list>
+
+      <p><b>Issue: Over-saturated or burned-looking images</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> Images look over-processed, harsh colors, too much contrast</item>
+        <item><b>Cause:</b> CFG scale too high for SD3 (using SDXL values 7-9)</item>
+        <item><b>Solution:</b>
+          <list listStyle="number">
+            <item>Lower CFG to SD3-appropriate range: 4.5-6.0 (NOT 7-9)</item>
+            <item>Start at CFG 5.0 and adjust from there</item>
+            <item>SD3 is MUCH more sensitive to high CFG than SDXL</item>
+            <item>Above 7.0 almost always causes artifacts in SD3</item>
+          </list>
+        </item>
+      </list>
+
+      <p><b>Issue: OOM with SD3 despite having 12GB VRAM</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> Out of memory when loading SD3 Medium</item>
+        <item><b>Cause:</b> All three text encoders (CLIP-L, CLIP-G, T5) loading simultaneously</item>
+        <item><b>Solutions:</b>
+          <list listStyle="number">
+            <item><b>Option 1:</b> Disable T5 in CLIPTextEncodeSD3 node (reduces to 8-10GB)
+              <list listStyle="dash">
+                <item>Set t5xxl input to null/empty</item>
+                <item>Quality reduction ~10-15%</item>
+                <item>Loses some prompt understanding capability</item>
+              </list>
+            </item>
+            <item><b>Option 2:</b> Use FP8 quantized SD3 model (10-12GB vs 12-14GB)</item>
+            <item><b>Option 3:</b> Launch with --lowvram flag</item>
+            <item><b>Option 4:</b> Reduce resolution to 768x768 or 832x832</item>
+          </list>
+        </item>
+        <item><b>Recommendation:</b> Keep T5 enabled if possible (best quality), disable only if necessary</item>
+      </list>
+
+      <p><b>Issue: Text in generated images is gibberish</b></p>
+      <list listStyle="dash">
+        <item><b>Symptom:</b> Even though SD3 is known for text rendering, output text is unreadable</item>
+        <item><b>Common Causes:</b>
+          <list listStyle="number">
+            <item>T5 encoder disabled or not loading</item>
+            <item>CFG scale too low (&lt;4.0)</item>
+            <item>Insufficient steps (&lt;20)</item>
+            <item>Text description not explicit enough in prompt</item>
+          </list>
+        </item>
+        <item><b>Solutions:</b>
+          <list listStyle="number">
+            <item>Verify T5 encoder is enabled in CLIPTextEncodeSD3 node</item>
+            <item>Use CFG 5.0-6.0 (sweet spot for text)</item>
+            <item>Use 28 steps minimum for text rendering</item>
+            <item>Be explicit: "text that says 'HELLO' in bold red letters"</item>
+            <item>SD3 still has limitations - very long text or complex fonts may fail</item>
+          </list>
+        </item>
+      </list>
+
+      <p><b>Issue: Workflow loads but generation fails silently</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> Workflow appears to run but produces no output or errors</item>
+        <item><b>Common Causes:</b>
+          <list listStyle="dash">
+            <item>Using wrong sampler (SD1.5/SDXL samplers with SD3)</item>
+            <item>Missing SD3-specific nodes in pipeline</item>
+            <item>Incorrect latent image node (using EmptyLatentImage instead of EmptySD3LatentImage)</item>
+          </list>
+        </item>
+        <item><b>Solutions:</b>
+          <list listStyle="number">
+            <item>Use EmptySD3LatentImage (NOT EmptyLatentImage)</item>
+            <item>Use dpmpp_2m or euler sampler (SD3-compatible)</item>
+            <item>Verify all nodes have SD3 suffix/compatibility</item>
+            <item>Check ComfyUI console for hidden error messages</item>
+          </list>
+        </item>
+      </list>
+    </cp>
+
+    <cp caption="Video Generation (Wan) Issues">
+      <p><b>Error: Video nodes not found</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> Cannot find video generation nodes in ComfyUI</item>
+        <item><b>Cause:</b> Video generation nodes are experimental and require special installation</item>
+        <item><b>Solution:</b>
+          <list listStyle="number">
+            <item>Install ComfyUI-VideoHelperSuite from ComfyUI-Manager</item>
+            <item>Install ComfyUI-AnimateDiff for motion models</item>
+            <item>Install model-specific custom nodes (check model documentation)</item>
+            <item>Video generation is rapidly evolving - check latest documentation</item>
+          </list>
+        </item>
+      </list>
+
+      <p><b>Issue: OOM with video generation (even with 24GB VRAM)</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> Out of memory when generating video, even short clips</item>
+        <item><b>Cause:</b> Video uses VRAM per frame (16 frames = 16x image VRAM)</item>
+        <item><b>Solutions:</b>
+          <list listStyle="number">
+            <item>Reduce frame count: 48 frames → 24 frames → 16 frames</item>
+            <item>Lower resolution: 768x768 → 512x512</item>
+            <item>Use frame batching (generate in smaller batches)</item>
+            <item>Close all other applications</item>
+            <item>Consider cloud GPU (32GB+ VRAM) for longer videos</item>
+          </list>
+        </item>
+        <item><b>Typical VRAM:</b> 16 frames @ 512x512 = 16-20GB, 32 frames = 28-32GB</item>
+      </list>
+
+      <p><b>Issue: Temporal flickering / inconsistent frames</b></p>
+      <list listStyle="dash">
+        <item><b>Symptoms:</b> Video frames don't flow smoothly, objects jump or change</item>
+        <item><b>Common Causes:</b>
+          <list listStyle="dash">
+            <item>Low context frames in video model</item>
+            <item>Insufficient motion conditioning</item>
+            <item>Wrong sampler settings</item>
+          </list>
+        </item>
+        <item><b>Solutions:</b>
+          <list listStyle="number">
+            <item>Increase context frames if model supports it</item>
+            <item>Use motion LoRAs or motion modules for better consistency</item>
+            <item>Lower CFG scale (high CFG causes flickering in video)</item>
+            <item>Use frame interpolation nodes to smooth output</item>
+            <item>Try different seeds - some are more stable than others</item>
+          </list>
+        </item>
+      </list>
+
+      <p><b>Issue: Video generation extremely slow (5+ minutes for 2 seconds)</b></p>
+      <list listStyle="dash">
+        <item><b>Symptom:</b> Generating short video clips takes many minutes</item>
+        <item><b>Reality Check:</b> This is normal for current video generation models</item>
+        <item><b>Typical Times:</b>
+          <list listStyle="dash">
+            <item>16 frames (1 sec @ 16fps): 2-3 minutes on RTX 4090</item>
+            <item>24 frames (1.5 sec): 3-5 minutes</item>
+            <item>48 frames (3 sec): 6-10 minutes</item>
+          </list>
+        </item>
+        <item><b>Optimization:</b>
+          <list listStyle="dash">
+            <item>Use lower resolution (512x512 vs 768x768) - 40% faster</item>
+            <item>Reduce step count to minimum that maintains quality</item>
+            <item>Generate keyframes only, use interpolation for in-between frames</item>
+            <item>Video generation is inherently slow - this is current state-of-the-art</item>
+          </list>
+        </item>
+      </list>
+
+      <p><b>Warning: Video file export issues</b></p>
+      <list listStyle="dash">
+        <item><b>Issue:</b> Frames generate but video file won't export or is corrupted</item>
+        <item><b>Causes:</b>
+          <list listStyle="dash">
+            <item>Missing ffmpeg installation</item>
+            <item>Incorrect codec settings</item>
+            <item>File path issues</item>
+          </list>
+        </item>
+        <item><b>Solutions:</b>
+          <list listStyle="number">
+            <item>Install ffmpeg: Required for video encoding (apt install ffmpeg / brew install ffmpeg)</item>
+            <item>Check VideoHelperSuite settings for codec (H.264/H.265)</item>
+            <item>Verify output path has write permissions</item>
+            <item>Try exporting as image sequence first, then combine with ffmpeg manually</item>
+          </list>
+        </item>
+      </list>
+    </cp>
+
+    <cp caption="Cross-Model Compatibility Issues">
+      <p><b>Error: Using SDXL LoRA with Flux/SD3</b></p>
+      <list listStyle="dash">
+        <item><b>Symptom:</b> LoRA fails to load or has no effect</item>
+        <item><b>Cause:</b> LoRAs are model-architecture specific, not cross-compatible</item>
+        <item><b>Facts:</b>
+          <list listStyle="dash">
+            <item>SD1.5 LoRAs → Only work with SD1.5</item>
+            <item>SDXL LoRAs → Only work with SDXL</item>
+            <item>SD3 LoRAs → Only work with SD3 (new format)</item>
+            <item>Flux LoRAs → Only work with Flux (different architecture entirely)</item>
+            <item>NO cross-compatibility possible</item>
+          </list>
+        </item>
+        <item><b>Solution:</b> Find/train LoRAs specifically for your target model family</item>
+        <item><b>Migration:</b> Popular LoRAs are being retrained for Flux/SD3 - check civitai.com</item>
+      </list>
+
+      <p><b>Issue: Mixing model components (VAE, CLIP, etc.)</b></p>
+      <list listStyle="dash">
+        <item><b>Symptom:</b> Trying to use SDXL VAE with Flux model, or SD1.5 CLIP with SD3</item>
+        <item><b>Result:</b> Errors, crashes, or severely degraded output</item>
+        <item><b>Rules:</b>
+          <list listStyle="dash">
+            <item>VAE must match model family (Flux VAE with Flux, SDXL VAE with SDXL)</item>
+            <item>Text encoders must match (T5 for Flux/SD3, CLIP for SD1.5/SDXL)</item>
+            <item>Cannot mix components between different model architectures</item>
+          </list>
+        </item>
+        <item><b>Exception:</b> Some post-processing (upscalers, color correction) is universal</item>
+      </list>
+
+      <p><b>Issue: Workflow created for SDXL doesn't work with Flux</b></p>
+      <list listStyle="dash">
+        <item><b>Expectation:</b> Just swap checkpoint and it works</item>
+        <item><b>Reality:</b> Flux requires different nodes and parameters</item>
+        <item><b>Major Differences:</b>
+          <list listStyle="number">
+            <item>Flux requires FluxGuidance node (critical, not optional)</item>
+            <item>Different text encoder (T5 vs dual CLIP)</item>
+            <item>Different guidance values (3.5 vs CFG 7-9)</item>
+            <item>Different optimal step counts (4 for Schnell, 20-30 for Dev)</item>
+            <item>Different VAE (ae.safetensors vs sdxl_vae)</item>
+            <item>No negative prompt needed in Flux</item>
+          </list>
+        </item>
+        <item><b>Recommendation:</b> Create separate workflows per model family rather than trying to make one universal workflow</item>
       </list>
     </cp>
   </troubleshooting>

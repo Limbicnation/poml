@@ -562,7 +562,7 @@
     <cp caption="Flux.1 Schnell Workflow (Ultra-Fast Next-Gen)">
       <p><b>Overview:</b> 4-step generation using guidance distillation, 3-6 seconds per image</p>
 
-      <p><b>Minimum Required Nodes (7-8 nodes):</b></p>
+      <p><b>Minimum Required Nodes (9 nodes):</b></p>
       <list listStyle="decimal">
         <item><b>CheckpointLoaderSimple or UNETLoader:</b> Load flux1-schnell.safetensors
           <list listStyle="dash">
@@ -720,7 +720,7 @@
     <cp caption="SD3 Medium Workflow (Balanced Next-Gen)">
       <p><b>Overview:</b> Triple text encoder architecture with MMDiT for improved prompt understanding</p>
 
-      <p><b>Required Nodes (8-10 nodes):</b></p>
+      <p><b>Required Nodes (7 nodes):</b></p>
       <list listStyle="decimal">
         <item><b>SD3CheckpointLoader or TripleCLIPLoader:</b> Load SD3 model
           <list listStyle="dash">

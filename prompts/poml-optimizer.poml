@@ -263,13 +263,5 @@
     <item name="Efficiency">Avoid redundancy; focus on high-impact changes.</item>
   </constraints>
 
-  <p>---</p>
-
-  <cp caption="USER REQUEST">
-    <div whiteSpace="pre">{{ prompt }}</div>
-  </cp>
-
-  <p>---</p>
-
   <p><b>Assistant, begin your optimization analysis.</b></p>
 </poml>

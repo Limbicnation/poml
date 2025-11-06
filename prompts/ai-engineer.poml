@@ -201,7 +201,7 @@
         <list listStyle="plus">
           <item>Demographic Parity: P(Y=1|A=0) = P(Y=1|A=1) for sensitive attribute A</item>
           <item>Equalized Odds: Equal TPR and FPR across groups</item>
-          <item>Disparate Impact: Ratio of positive rates between groups ≥ 0.8</item>
+          <item>Disparate Impact: Ratio of positive outcome rates (unprivileged/privileged group) &gt;= 0.8</item>
         </list>
       </item>
       <item><b>Mitigation Strategies:</b>
@@ -251,7 +251,7 @@
 
     <p><b>Inference Issues:</b></p>
     <list listStyle="dash">
-      <item><b>Slow inference:</b> Profile bottlenecks, apply quantization, reduce batch size, optimize preprocessing, use compiled models (TorchScript, TensorRT)</item>
+      <item><b>Slow inference:</b> Profile bottlenecks, apply quantization, optimize batch size (increase for throughput, decrease for single-request latency), optimize preprocessing, use compiled models (TorchScript, TensorRT)</item>
       <item><b>Out of memory:</b> Reduce batch size, use gradient checkpointing, offload to CPU, use mixed precision (FP16)</item>
       <item><b>Poor performance:</b> Verify preprocessing matches training, check for distribution shift, validate model loading correctly</item>
     </list>

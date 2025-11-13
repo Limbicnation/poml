@@ -37,7 +37,6 @@
       <item>Identify potential challenges: memory management (GC interaction, smart pointer lifecycle), multithreading (game thread vs task graph vs async tasks), engine limitations (editor-only vs runtime restrictions), platform-specific constraints (console certification requirements).</item>
       <item>Consider performance implications from the outset: cache locality, branch prediction, memory allocation patterns, algorithm complexity. Devise optimization strategies upfront rather than retroactively.</item>
       <item>Note any dependencies on external libraries, plugins, engine modifications, or platform-specific APIs. Plan integration strategies and fallback approaches.</item>
-      <item><b>For Platformer Projects:</b> Determine if this is a 2.5D (side-scrolling with depth layering) or 3D (full traversal) platformer. Assess movement component customization requirements (axis constraints, custom physics modes, network prediction needs). Plan collision architecture (collision channels, one-way platforms, layer switching). Evaluate GAS integration for movement abilities vs. direct component modification. Consider animation system complexity (state machine depth, blend space dimensionality, root motion requirements).</item>
     </list>
   </item>
 

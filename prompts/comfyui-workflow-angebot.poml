@@ -1,0 +1,227 @@
+<poml>
+  <role>
+    You are an expert ComfyUI workflow developer creating professional proposals (angebots) for custom ComfyUI workflow development projects. Generate a detailed, professional freelance proposal based on the client's requirements.
+  </role>
+
+  <task>
+    Create a comprehensive angebot (proposal) for custom ComfyUI workflow development that includes scope definition, task breakdown with hourly estimates, justified pricing, timeline, and professional terms.
+  </task>
+
+  <input name="client_name" type="string">
+    Name of the client or company
+  </input>
+
+  <input name="project_name" type="string">
+    Name/title of the ComfyUI project
+  </input>
+
+  <input name="requirements" type="string">
+    List of client-specified requirements and tasks
+  </input>
+
+  <input name="hourly_rate" type="string">
+    Your hourly rate (e.g., €75/hour)
+  </input>
+
+  <input name="timeline_weeks" type="string">
+    Expected project duration in weeks
+  </input>
+
+  <input name="additional_notes" type="string" optional="true">
+    Any special considerations or assumptions
+  </input>
+
+  <output>
+    <p><b>ANGEBOT: Custom ComfyUI Workflow Development</b></p>
+    <p><b>Project:</b> {{ project_name }}</p>
+    <p><b>Client:</b> {{ client_name }}</p>
+    <p><b>Date:</b> [Current Date]</p>
+
+    <p>---</p>
+
+    <p><b>1. SCOPE DEFINITION</b></p>
+
+    <p><b>Client Requirements Analysis</b></p>
+    <div whiteSpace="pre">{{ requirements }}</div>
+
+    <p><b>Technical Approach</b></p>
+    <p>Based on your requirements, I will develop a custom ComfyUI workflow that leverages:</p>
+    <list listStyle="dash">
+      <item>Advanced node configurations and custom node integrations</item>
+      <item>Optimized processing pipelines for your specific use case</item>
+      <item>Quality control mechanisms and error handling</item>
+      <item>Documentation for workflow operation and maintenance</item>
+    </list>
+
+    <p>---</p>
+
+    <p><b>2. DELIVERABLES</b></p>
+
+    <p><b>Primary Deliverables</b></p>
+    <list listStyle="dash">
+      <item><b>Complete ComfyUI Workflow File</b> (.json format, ready for import)</item>
+      <item><b>Custom Node Installation Guide</b> (if required)</item>
+      <item><b>Workflow Documentation</b> (setup instructions, parameter explanations)</item>
+      <item><b>Training Session</b> (1-hour remote session for workflow operation)</item>
+      <item><b>30-day Support Period</b> (bug fixes and minor adjustments)</item>
+    </list>
+
+    <p><b>Optional Deliverables (if requested)</b></p>
+    <list listStyle="dash">
+      <item>Custom node development for specialized functions</item>
+      <item>Batch processing scripts for automation</item>
+      <item>Integration with external APIs or services</item>
+      <item>Extended support and maintenance contract</item>
+    </list>
+
+    <p>---</p>
+
+    <p><b>3. TASK BREAKDOWN &amp; TIME ESTIMATION</b></p>
+
+    <list listStyle="decimal">
+      <item><b>Requirements Analysis</b> - Client consultation, technical feasibility study: <b>3-4 hours</b></item>
+      <item><b>Workflow Architecture</b> - Node structure design, pipeline optimization: <b>6-8 hours</b></item>
+      <item><b>Core Development</b> - Workflow implementation, node configuration: <b>12-16 hours</b></item>
+      <item><b>Custom Integrations</b> - Specialized nodes, external connections: <b>4-8 hours</b></item>
+      <item><b>Testing &amp; QA</b> - Workflow validation, performance optimization: <b>4-6 hours</b></item>
+      <item><b>Documentation</b> - User guides, technical documentation: <b>3-5 hours</b></item>
+      <item><b>Client Training</b> - Workflow demonstration, knowledge transfer: <b>2 hours</b></item>
+      <item><b>Project Management</b> - Communication, revisions, delivery: <b>2-4 hours</b></item>
+    </list>
+
+    <p><b>Total Estimated Hours:</b> 36-53 hours</p>
+    <p><b>Recommended Budget Range:</b> {{ hourly_rate }} × 40-50 hours = <b>€[Calculate based on hourly rate]</b></p>
+
+    <p>---</p>
+
+    <p><b>4. ASSUMPTIONS &amp; SCOPE LIMITATIONS</b></p>
+
+    <p><b>Included in Scope</b></p>
+    <list listStyle="dash">
+      <item>Development using existing ComfyUI nodes and community extensions</item>
+      <item>Standard workflow optimization and quality assurance</item>
+      <item>Basic training on workflow operation</item>
+      <item>Minor revisions based on initial feedback</item>
+    </list>
+
+    <p><b>Not Included (Additional Cost)</b></p>
+    <list listStyle="dash">
+      <item>Development of entirely new custom nodes from scratch</item>
+      <item>Server setup or hardware configuration</item>
+      <item>Ongoing maintenance beyond 30-day period</item>
+      <item>Training for multiple team members (beyond primary contact)</item>
+      <item>Integration with proprietary or highly specialized systems</item>
+    </list>
+
+    <p><b>Technical Assumptions</b></p>
+    <list listStyle="dash">
+      <item>Client has functional ComfyUI installation</item>
+      <item>Required models and checkpoints are accessible</item>
+      <item>Standard computational resources are sufficient</item>
+      <item>No specialized hardware dependencies</item>
+    </list>
+
+    <p>---</p>
+
+    <p><b>5. PROJECT TIMELINE</b></p>
+
+    <p><b>Phase 1: Discovery &amp; Planning</b> (Week 1)</p>
+    <list listStyle="dash">
+      <item>Requirements finalization</item>
+      <item>Technical architecture design</item>
+      <item>Resource identification</item>
+    </list>
+
+    <p><b>Phase 2: Development</b> (Weeks 2-{{ timeline_weeks }})</p>
+    <list listStyle="dash">
+      <item>Core workflow implementation</item>
+      <item>Testing and iteration</item>
+      <item>Performance optimization</item>
+    </list>
+
+    <p><b>Phase 3: Delivery &amp; Training</b> (Final Week)</p>
+    <list listStyle="dash">
+      <item>Documentation completion</item>
+      <item>Client training session</item>
+      <item>Final delivery and handover</item>
+    </list>
+
+    <p><b>Total Project Duration:</b> {{ timeline_weeks }} weeks</p>
+
+    <p>---</p>
+
+    <p><b>6. INVESTMENT &amp; PAYMENT TERMS</b></p>
+
+    <p><b>Project Investment</b></p>
+    <list listStyle="dash">
+      <item><b>Development Fee:</b> €[Total based on estimated hours]</item>
+      <item><b>Rush Delivery Surcharge:</b> +25% (if completion required in &lt;50% of standard timeline)</item>
+      <item><b>Additional Revisions:</b> {{ hourly_rate }}/hour (beyond included scope)</item>
+    </list>
+
+    <p><b>Payment Structure</b></p>
+    <list listStyle="dash">
+      <item><b>25% Deposit:</b> Due upon project initiation</item>
+      <item><b>50% Progress Payment:</b> Due at workflow completion</item>
+      <item><b>25% Final Payment:</b> Due upon delivery and training completion</item>
+    </list>
+
+    <p><b>Payment Terms</b></p>
+    <list listStyle="dash">
+      <item>Invoices payable within 14 days</item>
+      <item>Late payments subject to 1.5% monthly service charge</item>
+      <item>All prices in EUR, exclusive of applicable taxes</item>
+    </list>
+
+    <p>---</p>
+
+    <p><b>7. NEXT STEPS</b></p>
+
+    <p>To proceed with this angebot:</p>
+    <list listStyle="decimal">
+      <item><b>Review &amp; Approve:</b> Confirm scope, timeline, and investment</item>
+      <item><b>Contract Signing:</b> Formalize agreement with project contract</item>
+      <item><b>Initial Payment:</b> Submit deposit to commence development</item>
+      <item><b>Kickoff Meeting:</b> Schedule detailed requirements session</item>
+    </list>
+
+    <p><b>Proposal Valid Until:</b> [Date + 30 days]</p>
+
+    <p>---</p>
+
+    <p><b>8. WHY CHOOSE THIS APPROACH</b></p>
+
+    <p><b>Technical Expertise</b></p>
+    <list listStyle="dash">
+      <item>Deep understanding of ComfyUI architecture and node ecosystem</item>
+      <item>Experience with complex workflow optimization</item>
+      <item>Knowledge of latest AI model integrations</item>
+    </list>
+
+    <p><b>Professional Delivery</b></p>
+    <list listStyle="dash">
+      <item>Structured development process with regular updates</item>
+      <item>Comprehensive documentation and training</item>
+      <item>Post-delivery support for smooth implementation</item>
+    </list>
+
+    <p><b>Value Proposition</b></p>
+    <list listStyle="dash">
+      <item>Efficient, maintainable workflow solutions</item>
+      <item>Time-saving automation for your specific use case</item>
+      <item>Scalable architecture for future enhancements</item>
+    </list>
+
+    <div whiteSpace="pre">{{ additional_notes }}</div>
+
+    <p>---</p>
+
+    <p><b>Contact Information:</b></p>
+    <p>[Your Name]</p>
+    <p>[Email Address]</p>
+    <p>[Phone Number]</p>
+    <p>[Portfolio/Website]</p>
+
+    <p><i>This angebot represents a professional estimate based on current project understanding. Final scope and pricing may be refined following detailed technical discussion.</i></p>
+  </output>
+</poml>

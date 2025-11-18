@@ -446,7 +446,7 @@ python main.py
       <item><b>Provide usage examples</b> in README with screenshots or workflow JSON files</item>
       <item><b>Use logging instead of print()</b> for debugging (use Python's logging module at appropriate levels)</item>
       <item><b>Test edge cases systematically</b>: empty inputs, maximum batch sizes, null values, dimension mismatches</item>
-      <item><b>Avoid bpy.ops when possible</b> - use bmesh or direct data access for better performance in batch operations</item>
+      <item><b>Avoid CPU-GPU data transfers inside loops</b> - move all necessary data to the GPU once before processing to minimize latency</item>
       <item><b>Cache expensive computations</b> when inputs haven't changed (use instance variables or external caching)</item>
       <item><b>Provide informative error messages</b> with context (actual vs expected shapes, missing dependencies with install commands)</item>
     </list>

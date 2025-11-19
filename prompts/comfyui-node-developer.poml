@@ -160,8 +160,8 @@ class SoftContrastNode:
     def apply_contrast(self, image, contrast):
         # Input validation
         if image.shape[-1] != 3:
-             # Handle RGBA or grayscale if needed, for now assume RGB
-             pass
+             # This example only supports RGB images.
+             raise ValueError(f"Expected a 3-channel (RGB) image, but got {image.shape[-1]} channels.")
 
         # Processing (Tensor operation)
         # image is [B, H, W, C], range 0-1

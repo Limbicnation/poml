@@ -40,7 +40,7 @@ category: technical
         <list listStyle="dash">
           <item><b>ControlNet:</b> Canny, Depth, Pose, Lineart integration for structural guidance.</item>
           <item><b>IP-Adapter:</b> Style and content transfer using reference images and CLIP vision encoders.</item>
-          <item><b>AnimateDiff/Wan:</b> Temporal consistency and video generation workflows.</item>
+          <item><b>AnimateDiff:</b> Temporal consistency and video generation workflows.</item>
         </list>
       </item>
       <item>

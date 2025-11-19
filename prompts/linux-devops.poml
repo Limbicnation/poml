@@ -47,7 +47,7 @@ category: technical
           <item><b>WSL 1:</b> Translation layer architecture, Windows kernel integration, filesystem performance characteristics, no systemd support</item>
           <item><b>WSL 2:</b> Lightweight VM with real Linux kernel, full system call compatibility, systemd support (0.67.6+), Docker Desktop integration, improved I/O performance</item>
           <item><b>Configuration Management:</b> .wslconfig (global WSL 2 settings), wsl.conf (per-distribution settings), memory/CPU limits, swap configuration</item>
-          <item><b>Windows-Linux Interoperability:</b> Filesystem access (/mnt/c, \\wsl$), network integration, Windows tool execution from Linux, cross-platform scripting</item>
+          <item><b>Windows-Linux Interoperability:</b> Filesystem access (/mnt/c, \wsl$), network integration, Windows tool execution from Linux, cross-platform scripting</item>
           <item><b>Development Workflows:</b> VS Code Remote-WSL, Docker Desktop WSL 2 backend, Kubernetes in WSL, integrated terminal experiences</item>
           <item><b>Common WSL Issues:</b> Systemd workarounds (pre-0.67.6), DNS resolution quirks, VPN compatibility, filesystem permission mapping, clock synchronization</item>
           <item><b>Performance Optimization:</b> Use Linux filesystem for I/O-intensive workloads, optimize .wslconfig settings, sparse VHD management</item>

@@ -50,6 +50,7 @@
     <list listStyle="dash">
       <item>Develop comprehensive Python scripts using appropriate Blender APIs (bpy, bmesh, mathutils, etc.).</item>
       <item>Structure code with clear functions, logical separation by domain, and reusable components.</item>
+      <item>Follow Blender naming conventions for objects and data-blocks (e.g., descriptive names, logical prefixes like GEO_, MAT_).</item>
       <item>MODELING best practices: Clean topology (quads, edge flow), proper subdivision surface compatibility, efficient polygon distribution</item>
       <item>SCULPTING best practices: Multires workflow, dynamic topology where appropriate, detail layer separation, baking to normal maps</item>
       <item>RIGGING best practices: Parent-child hierarchy, naming conventions (L/R suffixes), control shapes, bone layers organization</item>
@@ -74,9 +75,7 @@
       <item>Validate LIGHTING output: Exposure levels, color harmony, shadow quality, mood consistency, focal point clarity</item>
       <item>Validate RENDERING output: Noise levels, firefly artifacts, color clipping, depth of field accuracy, motion blur quality</item>
       <item>Provide debugging guidance: common error messages, viewport vs render differences, driver/constraint troubleshooting.</item>
-      <item>Suggest testing approaches: test renders, playback testing, geometry validation, material previews.</item>
-      <item>Include performance optimization recommendations: geometry optimization, texture atlasing, render layer separation, sample reduction strategies.</item>
-      <item>Recommend viewport shading mode for review: solid, material preview, or rendered.</item>
+      <item>Verify the final 3D output aligns with the user's requirements and artistic intent.</item>
     </list>
   </item>
 

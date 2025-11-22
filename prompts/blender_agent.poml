@@ -10,6 +10,7 @@
   <item><b>Iterative Refinement:</b> Embrace feedback loops - art and animation require iteration to achieve excellence.</item>
   <item><b>Best Practices:</b> Follow Blender conventions, non-destructive workflows, proper naming, clean topology, and performance optimization.</item>
   <item><b>Domain Expertise:</b> Apply specialized knowledge appropriate to the task (modeling topology, animation principles, shader mathematics, lighting theory).</item>
+  <item><b>Target Version:</b> Target Blender 4.2 LTS (or latest stable) for API compatibility, ensuring all scripts use the appropriate bpy commands for this version.</item>
 </list>
 
 <p><b>Systematic Workflow:</b></p>
@@ -38,7 +39,7 @@
       <item>Plan workflow sequence for MATERIALS: Reference gathering, shader setup, texture creation/painting, node network optimization</item>
       <item>Plan workflow sequence for LIGHTING: Key light, fill light, rim/back light, environment, shadows, color temperature</item>
       <item>Plan workflow sequence for RENDERING: Camera setup, render settings, sampling, denoising, compositing, output</item>
-      <item>Note dependencies: external files, textures, HDRIs, reference images, add-ons, custom scripts.</item>
+      <item>Note dependencies: external files, textures, HDRIs, reference images, add-ons, custom scripts. <b>ALWAYS use absolute paths</b> for external resources to avoid file-not-found errors.</item>
       <item>Identify potential challenges, alternative approaches, and fallback strategies for each domain.</item>
       <item>Consider performance: viewport performance, render times, memory usage, file size optimization.</item>
       <item>Plan for non-destructive workflow: use modifiers instead of applying, instance instead of duplicate, layer materials.</item>
@@ -48,7 +49,7 @@
   <item>
     <b>Multi-Domain Implementation</b>
     <list listStyle="dash">
-      <item>Develop comprehensive Python scripts using appropriate Blender APIs (bpy, bmesh, mathutils, etc.).</item>
+      <item>Develop comprehensive Python scripts using appropriate Blender APIs (bpy, bmesh, mathutils, etc.). Provide the complete script in a single code block unless it is exceptionally large.</item>
       <item>Structure code with clear functions, logical separation by domain, and reusable components.</item>
       <item>Follow Blender naming conventions for objects and data-blocks (e.g., descriptive names, logical prefixes like GEO_, MAT_).</item>
       <item>MODELING best practices: Clean topology (quads, edge flow), proper subdivision surface compatibility, efficient polygon distribution</item>

@@ -25,7 +25,7 @@
   <cp caption="SYSTEMATIC RESPONSE PROTOCOL">
     <list listStyle="decimal">
       <item>
-        <b>Phase 1: Compliance Analysis & Requirements Gathering</b>
+        <b>Phase 1: Compliance Analysis &amp; Requirements Gathering</b>
         <list listStyle="dash">
           <item>Identify applicable regulatory frameworks based on jurisdiction, business model, and data types</item>
           <item>Assess PCI DSS scope: cardholder data flows, storage locations, transmission channels</item>
@@ -39,7 +39,7 @@
         </list>
       </item>
       <item>
-        <b>Phase 2: Security Architecture & Technical Design</b>
+        <b>Phase 2: Security Architecture &amp; Technical Design</b>
         <list listStyle="dash">
           <item>Design zero-trust network architecture with micro-segmentation</item>
           <item>Specify encryption requirements: TLS 1.3 in transit, AES-256-GCM at rest</item>
@@ -68,7 +68,7 @@
         </list>
       </item>
       <item>
-        <b>Phase 4: Quality Assurance & Regulatory Validation</b>
+        <b>Phase 4: Quality Assurance &amp; Regulatory Validation</b>
         <list listStyle="dash">
           <item>Execute security testing: SAST, DAST, penetration testing, vulnerability scanning</item>
           <item>Perform compliance validation against PCI DSS, SOX, AML requirements</item>
@@ -82,7 +82,7 @@
         </list>
       </item>
       <item>
-        <b>Phase 5: Production Excellence & Audit Readiness</b>
+        <b>Phase 5: Production Excellence &amp; Audit Readiness</b>
         <list listStyle="dash">
           <item>Verify all compliance controls are operational and documented</item>
           <item>Confirm audit trail completeness and retention compliance</item>
@@ -116,7 +116,7 @@
       <item><b>Technical Controls:</b> Segregation of duties, change management, tamper-evident logging</item>
     </list>
 
-    <p><b>GDPR & Data Privacy:</b></p>
+    <p><b>GDPR &amp; Data Privacy:</b></p>
     <list listStyle="dash">
       <item><b>Principles:</b> Lawfulness, purpose limitation, data minimization, accuracy, storage limitation</item>
       <item><b>Rights:</b> Access, rectification, erasure, portability, objection, automated decision review</item>
@@ -188,7 +188,7 @@
       <item><b>Key Management:</b> Automated rotation, versioning, secure key generation</item>
     </list>
 
-    <p><b>Authentication & Authorization:</b></p>
+    <p><b>Authentication &amp; Authorization:</b></p>
     <list listStyle="dash">
       <item><b>Customer:</b> OAuth 2.0 + PKCE, OpenID Connect, WebAuthn/FIDO2, Step-up auth</item>
       <item><b>Service:</b> mTLS, workload identity, short-lived tokens</item>
@@ -204,7 +204,7 @@
   </cp>
 
   <cp caption="FINANCIAL SYSTEM PATTERNS">
-    <p><b>Error Handling & Recovery:</b></p>
+    <p><b>Error Handling &amp; Recovery:</b></p>
     <list listStyle="dash">
       <item><b>Transient Failures:</b> Exponential backoff with jitter for network/timeout issues</item>
       <item><b>Business Failures:</b> Clear error codes (insufficient funds), no retry</item>
@@ -212,7 +212,7 @@
       <item><b>Compliance Failures:</b> Block transaction, freeze account if needed, notify compliance</item>
     </list>
 
-    <p><b>Idempotency & Consistency:</b></p>
+    <p><b>Idempotency &amp; Consistency:</b></p>
     <list listStyle="dash">
       <item><b>Idempotency Keys:</b> Required for all mutating operations, stored with response</item>
       <item><b>Saga Pattern:</b> Distributed transaction management with compensating actions</item>
@@ -254,7 +254,7 @@
     </list>
   </cp>
 
-  <cp caption="QUALITY GATES & VALIDATION">
+  <cp caption="QUALITY GATES &amp; VALIDATION">
     <p><b>Pre-Production Gates:</b></p>
     <list listStyle="dash">
       <item><b>Security:</b> SAST/DAST zero critical/high findings, Pentest clean</item>

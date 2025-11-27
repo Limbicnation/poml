@@ -1,6 +1,53 @@
 ---
 name: poml-optimizer
-description: Use this agent when the user needs to improve, refine, or optimize POML (Prompt Optimization Markup Language) prompts. Trigger this agent in scenarios such as:\n\n<example>\nContext: User has written a POML template for code review but wants to enhance its structure and effectiveness.\n\nuser: "I've created this POML prompt for code reviews, but I think it could be more specific. Can you help optimize it?"\n\nassistant: "I'll use the Task tool to launch the poml-optimizer agent to analyze and improve your POML prompt."\n\n<task>\nAgent: poml-optimizer\nInstruction: Analyze the user's code review POML prompt and provide optimization strategies focusing on specificity, structure, and actionable evaluation criteria.\n</task>\n</example>\n\n<example>\nContext: User is working on a multi-phase workflow POML template that lacks clear procedural steps.\n\nuser: "Here's my POML template for project planning. It feels too vague and doesn't have enough structure."\n\nassistant: "Let me use the poml-optimizer agent to enhance your template with clearer procedural steps and better phase structure."\n\n<task>\nAgent: poml-optimizer\nInstruction: Review the project planning POML template and provide optimization strategies to add clear procedural steps, phase dependencies, and structured deliverables.\n</task>\n</example>\n\n<example>\nContext: User mentions wanting to improve a POML prompt after explaining its purpose.\n\nuser: "I need to create a better POML template for my Stable Diffusion workflows. The current one doesn't give consistent results."\n\nassistant: "I'll engage the poml-optimizer agent to help you create a more effective POML template for your image generation workflows."\n\n<task>\nAgent: poml-optimizer\nInstruction: Design optimization strategies for a Stable Diffusion POML template, focusing on composition guidance, quality modifiers, style references, and structured output formats.\n</task>\n</example>\n\nProactively suggest this agent when:\n- User shares a POML template and mentions it's not working as expected\n- User asks how to improve prompt effectiveness or clarity\n- User describes issues with prompt structure, syntax, or organization\n- User is creating a new POML template and wants best practices guidance\n- User mentions inconsistent results from their prompts
+description: |
+  Use this agent when the user needs to improve, refine, or optimize POML (Prompt Optimization Markup Language) prompts. Trigger this agent in scenarios such as:
+
+  <example>
+  Context: User has written a POML template for code review but wants to enhance its structure and effectiveness.
+
+  user: "I've created this POML prompt for code reviews, but I think it could be more specific. Can you help optimize it?"
+
+  assistant: "I'll use the Task tool to launch the poml-optimizer agent to analyze and improve your POML prompt."
+
+  <task>
+  Agent: poml-optimizer
+  Instruction: Analyze the user's code review POML prompt and provide optimization strategies focusing on specificity, structure, and actionable evaluation criteria.
+  </task>
+  </example>
+
+  <example>
+  Context: User is working on a multi-phase workflow POML template that lacks clear procedural steps.
+
+  user: "Here's my POML template for project planning. It feels too vague and doesn't have enough structure."
+
+  assistant: "Let me use the poml-optimizer agent to enhance your template with clearer procedural steps and better phase structure."
+
+  <task>
+  Agent: poml-optimizer
+  Instruction: Review the project planning POML template and provide optimization strategies to add clear procedural steps, phase dependencies, and structured deliverables.
+  </task>
+  </example>
+
+  <example>
+  Context: User mentions wanting to improve a POML prompt after explaining its purpose.
+
+  user: "I need to create a better POML template for my Stable Diffusion workflows. The current one doesn't give consistent results."
+
+  assistant: "I'll engage the poml-optimizer agent to help you create a more effective POML template for your image generation workflows."
+
+  <task>
+  Agent: poml-optimizer
+  Instruction: Design optimization strategies for a Stable Diffusion POML template, focusing on composition guidance, quality modifiers, style references, and structured output formats.
+  </task>
+  </example>
+
+  Proactively suggest this agent when:
+  - User shares a POML template and mentions it's not working as expected
+  - User asks how to improve prompt effectiveness or clarity
+  - User describes issues with prompt structure, syntax, or organization
+  - User is creating a new POML template and wants best practices guidance
+  - User mentions inconsistent results from their prompts
 model: sonnet
 color: purple
 ---

@@ -1,51 +1,52 @@
 ---
 name: ubuntu-security-script-validator
-description: Use this agent when you need to validate Ubuntu Linux security and maintenance scripts before deployment. This agent should be invoked when:
+description: |
+  Use this agent when you need to validate Ubuntu Linux security and maintenance scripts before deployment. This agent should be invoked when:
 
-<example>
-Context: User has written a bash script for automated Ubuntu system updates and wants it reviewed before deploying to production servers.
+  <example>
+  Context: User has written a bash script for automated Ubuntu system updates and wants it reviewed before deploying to production servers.
 
-user: "I've written a script to automate security updates on our Ubuntu servers. Can you review it?"
+  user: "I've written a script to automate security updates on our Ubuntu servers. Can you review it?"
 
-assistant: "I'll use the ubuntu-security-script-validator agent to perform a comprehensive security validation of your script."
+  assistant: "I'll use the ubuntu-security-script-validator agent to perform a comprehensive security validation of your script."
 
-<Task tool invocation with ubuntu-security-script-validator agent>
-</example>
+  <Task tool invocation with ubuntu-security-script-validator agent>
+  </example>
 
-<example>
-Context: User has just completed writing a system maintenance script and needs validation.
+  <example>
+  Context: User has just completed writing a system maintenance script and needs validation.
 
-user: "Here's my Ubuntu cleanup script that removes old kernels and clears package caches:
-```bash
-#!/bin/bash
-apt autoremove -y
-apt clean
-```"
+  user: "Here's my Ubuntu cleanup script that removes old kernels and clears package caches:
+  ```bash
+  #!/bin/bash
+  apt autoremove -y
+  apt clean
+  ```"
 
-assistant: "Let me validate this script using the ubuntu-security-script-validator agent to ensure it meets enterprise security standards and won't cause system issues."
+  assistant: "Let me validate this script using the ubuntu-security-script-validator agent to ensure it meets enterprise security standards and won't cause system issues."
 
-<Task tool invocation with ubuntu-security-script-validator agent>
-</example>
+  <Task tool invocation with ubuntu-security-script-validator agent>
+  </example>
 
-<example>
-Context: User is preparing a cron job script for automated maintenance and mentions security concerns.
+  <example>
+  Context: User is preparing a cron job script for automated maintenance and mentions security concerns.
 
-user: "I need to set up automated maintenance for our production Ubuntu servers. I'm concerned about security."
+  user: "I need to set up automated maintenance for our production Ubuntu servers. I'm concerned about security."
 
-assistant: "I'll help you create the script, and then we'll use the ubuntu-security-script-validator agent to ensure it meets all security requirements before deployment."
+  assistant: "I'll help you create the script, and then we'll use the ubuntu-security-script-validator agent to ensure it meets all security requirements before deployment."
 
-<After script creation>
+  <After script creation>
 
-assistant: "Now let me validate this script with the ubuntu-security-script-validator agent to verify it's production-ready."
+  assistant: "Now let me validate this script with the ubuntu-security-script-validator agent to verify it's production-ready."
 
-<Task tool invocation with ubuntu-security-script-validator agent>
-</example>
+  <Task tool invocation with ubuntu-security-script-validator agent>
+  </example>
 
-Proactively use this agent when:
-- A user shares any bash script intended for Ubuntu system administration
-- Scripts involve system updates, cleanup operations, or security hardening
-- Code involves privileged operations (sudo/root)
-- Users ask for a security review or audit of their Linux scripts
+  Proactively use this agent when:
+  - A user shares any bash script intended for Ubuntu system administration
+  - Scripts involve system updates, cleanup operations, or security hardening
+  - Code involves privileged operations (sudo/root)
+  - Users ask for a security review or audit of their Linux scripts
 tools: Read, Bash
 version: 1.0
 domain: Security, Linux, DevOps

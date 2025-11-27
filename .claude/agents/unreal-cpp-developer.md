@@ -1,6 +1,35 @@
 ---
 name: unreal-cpp-developer
-description: Use this agent when working with Unreal Engine C++ development tasks, including refactoring existing game code, implementing new gameplay features, optimizing performance-critical systems, integrating C++ with Blueprints, or reviewing Unreal Engine C++ code and logs. Examples:\n\n<example>\nContext: User has just written a new C++ class for a custom character movement component.\nuser: "I've just finished implementing a custom movement component for wall-running. Can you review it?"\nassistant: "I'll use the unreal-cpp-developer agent to review your custom movement component implementation."\n<commentary>The user has completed a logical chunk of C++ code and is requesting a review, which is a perfect use case for this agent.</commentary>\n</example>\n\n<example>\nContext: User is experiencing crashes in their game and has log files.\nuser: "My game is crashing when I try to spawn enemies. Here are the logs: [log content]"\nassistant: "Let me use the unreal-cpp-developer agent to analyze these crash logs and identify the issue."\n<commentary>The user needs help debugging a crash, which requires expertise in Unreal Engine C++ and log analysis.</commentary>\n</example>\n\n<example>\nContext: User wants to implement a new gameplay feature.\nuser: "I need to create a damage system that supports different damage types and resistances"\nassistant: "I'll use the unreal-cpp-developer agent to design and implement this damage system following Unreal Engine best practices."\n<commentary>This is a feature implementation task that requires structured planning and C++ development expertise.</commentary>\n</example>\n\n<example>\nContext: User has performance issues in their game.\nuser: "My game is running at 30 FPS in crowded scenes. Can you help optimize it?"\nassistant: "I'll use the unreal-cpp-developer agent to analyze the performance bottlenecks and provide optimization strategies."\n<commentary>Performance optimization is a core competency of this agent, requiring deep knowledge of Unreal Engine profiling and optimization techniques.</commentary>\n</example>
+description: |
+  Use this agent when working with Unreal Engine C++ development tasks, including refactoring existing game code, implementing new gameplay features, optimizing performance-critical systems, integrating C++ with Blueprints, or reviewing Unreal Engine C++ code and logs. Examples:
+
+  <example>
+  Context: User has just written a new C++ class for a custom character movement component.
+  user: "I've just finished implementing a custom movement component for wall-running. Can you review it?"
+  assistant: "I'll use the unreal-cpp-developer agent to review your custom movement component implementation."
+  <commentary>The user has completed a logical chunk of C++ code and is requesting a review, which is a perfect use case for this agent.</commentary>
+  </example>
+
+  <example>
+  Context: User is experiencing crashes in their game and has log files.
+  user: "My game is crashing when I try to spawn enemies. Here are the logs: [log content]"
+  assistant: "Let me use the unreal-cpp-developer agent to analyze these crash logs and identify the issue."
+  <commentary>The user needs help debugging a crash, which requires expertise in Unreal Engine C++ and log analysis.</commentary>
+  </example>
+
+  <example>
+  Context: User wants to implement a new gameplay feature.
+  user: "I need to create a damage system that supports different damage types and resistances"
+  assistant: "I'll use the unreal-cpp-developer agent to design and implement this damage system following Unreal Engine best practices."
+  <commentary>This is a feature implementation task that requires structured planning and C++ development expertise.</commentary>
+  </example>
+
+  <example>
+  Context: User has performance issues in their game.
+  user: "My game is running at 30 FPS in crowded scenes. Can you help optimize it?"
+  assistant: "I'll use the unreal-cpp-developer agent to analyze the performance bottlenecks and provide optimization strategies."
+  <commentary>Performance optimization is a core competency of this agent, requiring deep knowledge of Unreal Engine profiling and optimization techniques.</commentary>
+  </example>
 model: sonnet
 color: blue
 ---

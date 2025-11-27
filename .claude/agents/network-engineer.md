@@ -1,6 +1,44 @@
 ---
 name: network-engineer
-description: Use this agent when you need to design, implement, or optimize network infrastructure including cloud/hybrid architectures, VPC configurations, load balancing, DNS architecture, security implementations (zero-trust, micro-segmentation), performance optimization, troubleshooting network issues, or implementing network automation. This agent specializes in enterprise-grade networking with 99.99% uptime targets, sub-50ms regional latency requirements, and comprehensive security compliance.\n\nExamples:\n\n<example>\nContext: User has just designed a multi-region cloud architecture and needs network connectivity between regions.\nuser: "I've set up application servers in us-east-1 and eu-west-1. How should I connect them?"\nassistant: "Let me engage the network-engineer agent to design a secure, high-performance multi-region network architecture with proper routing, security controls, and failover mechanisms."\n<commentary>Since the user needs network architecture design for multi-region connectivity, use the network-engineer agent to provide a comprehensive solution including VPC peering/transit gateway design, routing configuration, security controls, and performance optimization.</commentary>\n</example>\n\n<example>\nContext: User is experiencing performance issues with their application.\nuser: "Our API response times have increased from 50ms to 300ms over the past week. Users are complaining about slowness."\nassistant: "I'm going to use the network-engineer agent to systematically troubleshoot this performance degradation and identify the root cause."\n<commentary>Performance issues often have network-related causes. Use the network-engineer agent to analyze latency, packet loss, routing changes, bandwidth utilization, and other network factors that could be causing the degradation.</commentary>\n</example>\n\n<example>\nContext: User needs to implement security controls for their cloud environment.\nuser: "We need to pass a PCI DSS audit. What network security controls should we implement?"\nassistant: "Let me engage the network-engineer agent to design a comprehensive zero-trust network security architecture that meets PCI DSS compliance requirements."\n<commentary>Compliance requirements often drive network security design. Use the network-engineer agent to implement defense-in-depth, micro-segmentation, encryption, monitoring, and other controls required for compliance.</commentary>\n</example>\n\n<example>\nContext: User has completed infrastructure provisioning and agent proactively suggests network review.\nuser: "I've just deployed our new microservices application to production."\nassistant: "Congratulations on the deployment! Let me proactively engage the network-engineer agent to verify network connectivity, performance, security controls, and monitoring coverage for your new production workload."\n<commentary>After significant infrastructure changes, proactively use the network-engineer agent to validate network configuration, test performance, verify security controls, and ensure monitoring is properly configured.</commentary>\n</example>\n\n<example>\nContext: User is planning infrastructure changes and agent proactively suggests network impact analysis.\nuser: "We're planning to migrate our database to a different availability zone next week."\nassistant: "Before proceeding with that migration, let me engage the network-engineer agent to analyze the network impact, plan connectivity changes, update routing, and ensure minimal disruption."\n<commentary>Infrastructure changes often have network implications. Proactively use the network-engineer agent to assess impact, plan network changes, identify risks, and develop rollback procedures before major migrations.</commentary>\n</example>
+description: |
+  Use this agent when you need to design, implement, or optimize network infrastructure including cloud/hybrid architectures, VPC configurations, load balancing, DNS architecture, security implementations (zero-trust, micro-segmentation), performance optimization, troubleshooting network issues, or implementing network automation. This agent specializes in enterprise-grade networking with 99.99% uptime targets, sub-50ms regional latency requirements, and comprehensive security compliance.
+
+  Examples:
+
+  <example>
+  Context: User has just designed a multi-region cloud architecture and needs network connectivity between regions.
+  user: "I've set up application servers in us-east-1 and eu-west-1. How should I connect them?"
+  assistant: "Let me engage the network-engineer agent to design a secure, high-performance multi-region network architecture with proper routing, security controls, and failover mechanisms."
+  <commentary>Since the user needs network architecture design for multi-region connectivity, use the network-engineer agent to provide a comprehensive solution including VPC peering/transit gateway design, routing configuration, security controls, and performance optimization.</commentary>
+  </example>
+
+  <example>
+  Context: User is experiencing performance issues with their application.
+  user: "Our API response times have increased from 50ms to 300ms over the past week. Users are complaining about slowness."
+  assistant: "I'm going to use the network-engineer agent to systematically troubleshoot this performance degradation and identify the root cause."
+  <commentary>Performance issues often have network-related causes. Use the network-engineer agent to analyze latency, packet loss, routing changes, bandwidth utilization, and other network factors that could be causing the degradation.</commentary>
+  </example>
+
+  <example>
+  Context: User needs to implement security controls for their cloud environment.
+  user: "We need to pass a PCI DSS audit. What network security controls should we implement?"
+  assistant: "Let me engage the network-engineer agent to design a comprehensive zero-trust network security architecture that meets PCI DSS compliance requirements."
+  <commentary>Compliance requirements often drive network security design. Use the network-engineer agent to implement defense-in-depth, micro-segmentation, encryption, monitoring, and other controls required for compliance.</commentary>
+  </example>
+
+  <example>
+  Context: User has completed infrastructure provisioning and agent proactively suggests network review.
+  user: "I've just deployed our new microservices application to production."
+  assistant: "Congratulations on the deployment! Let me proactively engage the network-engineer agent to verify network connectivity, performance, security controls, and monitoring coverage for your new production workload."
+  <commentary>After significant infrastructure changes, proactively use the network-engineer agent to validate network configuration, test performance, verify security controls, and ensure monitoring is properly configured.</commentary>
+  </example>
+
+  <example>
+  Context: User is planning infrastructure changes and agent proactively suggests network impact analysis.
+  user: "We're planning to migrate our database to a different availability zone next week."
+  assistant: "Before proceeding with that migration, let me engage the network-engineer agent to analyze the network impact, plan connectivity changes, update routing, and ensure minimal disruption."
+  <commentary>Infrastructure changes often have network implications. Proactively use the network-engineer agent to assess impact, plan network changes, identify risks, and develop rollback procedures before major migrations.</commentary>
+  </example>
 model: sonnet
 color: purple
 ---
